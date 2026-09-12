@@ -1,0 +1,150 @@
+{
+  "sunsetFormat": "context",
+  "version": "1",
+  "description": "Operator-supplied facts that automated discovery cannot collect: data-secrecy lifetime, migration effort, agility, criticality. SYNTHETIC - authored for SUNSET development.",
+  "synthetic": true,
+  "assets": [
+    {
+      "selector": "payments-gateway",
+      "owner": "payments engineering",
+      "dataSecrecyLifetimeYears": 10,
+      "migrationEffortMonths": 14,
+      "agility": "negotiated",
+      "systemCriticality": "hva",
+      "hndlExposed": true
+    },
+    {
+      "selector": "customer-api",
+      "owner": "platform engineering",
+      "dataSecrecyLifetimeYears": 7,
+      "migrationEffortMonths": 9,
+      "agility": "negotiated",
+      "systemCriticality": "high",
+      "hndlExposed": true
+    },
+    {
+      "selector": "internal-pki",
+      "owner": "security engineering",
+      "dataSecrecyLifetimeYears": 20,
+      "migrationEffortMonths": 22,
+      "agility": "hardcoded",
+      "systemCriticality": "hva",
+      "hndlExposed": false
+    },
+    {
+      "selector": "hsm-bridge",
+      "owner": "security engineering",
+      "dataSecrecyLifetimeYears": 20,
+      "migrationEffortMonths": 30,
+      "agility": "vendor-controlled",
+      "systemCriticality": "hva",
+      "hndlExposed": false
+    },
+    {
+      "selector": "document-archive",
+      "owner": "records engineering",
+      "dataSecrecyLifetimeYears": 25,
+      "migrationEffortMonths": 11,
+      "agility": "configuration",
+      "systemCriticality": "high",
+      "hndlExposed": true
+    },
+    {
+      "selector": "vpn-concentrator",
+      "owner": "network engineering",
+      "dataSecrecyLifetimeYears": 8,
+      "migrationEffortMonths": 18,
+      "agility": "vendor-controlled",
+      "systemCriticality": "high",
+      "hndlExposed": true
+    },
+    {
+      "selector": "firmware-updater",
+      "owner": "devices engineering",
+      "dataSecrecyLifetimeYears": 12,
+      "migrationEffortMonths": 26,
+      "agility": "hardcoded",
+      "systemCriticality": "high",
+      "hndlExposed": false
+    },
+    {
+      "selector": "message-broker",
+      "owner": "platform engineering",
+      "dataSecrecyLifetimeYears": 4,
+      "migrationEffortMonths": 7,
+      "agility": "configuration",
+      "systemCriticality": "moderate",
+      "hndlExposed": true
+    },
+    {
+      "selector": "identity-provider",
+      "owner": "security engineering",
+      "dataSecrecyLifetimeYears": 12,
+      "migrationEffortMonths": 12,
+      "agility": "negotiated",
+      "systemCriticality": "hva",
+      "hndlExposed": true
+    },
+    {
+      "selector": "backup-vault",
+      "owner": "records engineering",
+      "dataSecrecyLifetimeYears": 30,
+      "migrationEffortMonths": 15,
+      "agility": "configuration",
+      "systemCriticality": "high",
+      "hndlExposed": true
+    },
+    {
+      "selector": "telemetry-pipeline",
+      "owner": "platform engineering",
+      "dataSecrecyLifetimeYears": 1,
+      "migrationEffortMonths": 4,
+      "agility": "negotiated",
+      "systemCriticality": "low",
+      "hndlExposed": false
+    },
+    {
+      "selector": "mobile-sdk",
+      "owner": "product engineering",
+      "dataSecrecyLifetimeYears": 3,
+      "migrationEffortMonths": 16,
+      "agility": "hardcoded",
+      "systemCriticality": "moderate",
+      "hndlExposed": true
+    },
+    {
+      "selector": "code-signing",
+      "owner": "release engineering",
+      "dataSecrecyLifetimeYears": 10,
+      "migrationEffortMonths": 20,
+      "agility": "hardcoded",
+      "systemCriticality": "hva",
+      "hndlExposed": false
+    },
+    {
+      "selector": "analytics-warehouse",
+      "owner": "data engineering",
+      "migrationEffortMonths": 6,
+      "systemCriticality": "moderate",
+      "hndlExposed": true
+    },
+    {
+      "selector": "edge-cache",
+      "owner": "network engineering",
+      "dataSecrecyLifetimeYears": 1,
+      "migrationEffortMonths": 3,
+      "agility": "negotiated",
+      "systemCriticality": "low",
+      "hndlExposed": false
+    },
+    {
+      "selector": "research-store",
+      "owner": "data engineering",
+      "dataSecrecyLifetimeYears": 40,
+      "migrationEffortMonths": 10,
+      "agility": "configuration",
+      "systemCriticality": "high",
+      "hndlExposed": true
+    }
+  ]
+}

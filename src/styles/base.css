@@ -1,0 +1,337 @@
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   BASE
+   ========================================================================= */
+@layer base {
+  * {
+    border-color: var(--c-rule);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    margin: 0;
+    background: var(--c-ground);
+    color: var(--c-ink);
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 13px;
+    line-height: 20px;
+    font-feature-settings: 'cv05' 1, 'cv08' 1, 'ss03' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+  }
+
+  /* Every numeral in this product is data. Tabular by default, everywhere. */
+  body,
+  input,
+  button,
+  select,
+  textarea {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- browser surfaces: these belong to the design system too ---------- */
+  ::selection {
+    background: var(--c-selection);
+    color: var(--c-ink);
+  }
+
+  :where(input, textarea) {
+    caret-color: var(--c-amber);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--c-scroll-thumb) transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--c-scroll-thumb);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--c-scroll-thumb-hover);
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--c-amber-dim);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
+  /* One focus treatment, everywhere, and it is always visible. */
+  :focus-visible {
+    outline: 2px solid var(--c-amber);
+    outline-offset: 1px;
+    border-radius: 1px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* ============================================================================
+   THE GROUND
+   A fine survey grid, barely present. It exists so that the ruled elements
+   above it read as drawn on something rather than floating.
+   ========================================================================= */
+@layer components {
+  .ground-grid {
+    background-image: linear-gradient(
+        to right,
+        var(--c-rule-faint) 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, var(--c-rule-faint) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: -1px -1px;
+  }
+
+  .ground-dots {
+    background-image: radial-gradient(var(--c-rule-faint) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* ------------------------------------------------------------------------
+     HATCH FILLS
+     Severity is encoded by pattern before it is encoded by color, so the log
+     is still readable in grayscale, in print, and to a color-blind reader.
+     These are the CSS twins of the SVG patterns in <HatchDefs/>.
+     --------------------------------------------------------------------- */
+  .hatch {
+    --hatch-ink: currentColor;
+    --hatch-alpha: 0.42;
+  }
+  .hatch-diagonal {
+    background-image: repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--hatch-ink) calc(var(--hatch-alpha) * 100%), transparent) 0 1px,
+      transparent 1px 5px
+    );
+  }
+  .hatch-cross {
+    background-image: repeating-linear-gradient(
+        45deg,
+        color-mix(in srgb, var(--hatch-ink) calc(var(--hatch-alpha) * 100%), transparent) 0 1px,
+        transparent 1px 5px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        color-mix(in srgb, var(--hatch-ink) calc(var(--hatch-alpha) * 100%), transparent) 0 1px,
+        transparent 1px 5px
+      );
+  }
+  .hatch-horizontal {
+    background-image: repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--hatch-ink) calc(var(--hatch-alpha) * 100%), transparent) 0 1px,
+      transparent 1px 4px
+    );
+  }
+  .hatch-dot {
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--hatch-ink) calc(var(--hatch-alpha) * 100%), transparent) 1px,
+      transparent 1.2px
+    );
+    background-size: 5px 5px;
+  }
+  .hatch-stipple {
+    background-image: radial-gradient(
+        color-mix(in srgb, var(--hatch-ink) calc(var(--hatch-alpha) * 100%), transparent) 0.6px,
+        transparent 0.8px
+      ),
+      radial-gradient(
+        color-mix(in srgb, var(--hatch-ink) calc(var(--hatch-alpha) * 100%), transparent) 0.6px,
+        transparent 0.8px
+      );
+    background-size: 7px 7px, 7px 7px;
+    background-position: 0 0, 3.5px 3.5px;
+  }
+  /* No recovery: the interval the log could not assess. Widely spaced,
+     deliberately sparse, and never mistakable for a filled bed. */
+  .hatch-void {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--hatch-ink) 34%, transparent) 0 1px,
+      transparent 1px 9px
+    );
+  }
+
+  /* ------------------------------------------------------------------------
+     TYPE ROLES
+     --------------------------------------------------------------------- */
+  .t-label {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    line-height: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c-ink-muted);
+    font-weight: 500;
+  }
+  .t-data {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-variant-ligatures: none;
+    letter-spacing: -0.01em;
+  }
+  .t-section {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--c-ink-dim);
+  }
+
+  /* Body copy stays inside a readable measure wherever it is prose. */
+  .measure {
+    max-width: 68ch;
+  }
+
+  /* The one range input in the product, themed rather than left to the OS. */
+  .sunset-range {
+    background: var(--c-bed-3);
+    outline-offset: 4px;
+  }
+  .sunset-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    background: var(--c-amber);
+    border: 1px solid var(--c-amber);
+    cursor: grab;
+  }
+  .sunset-range::-webkit-slider-thumb:active {
+    cursor: grabbing;
+  }
+  .sunset-range::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    background: var(--c-amber);
+    border: 1px solid var(--c-amber);
+    cursor: grab;
+  }
+  .sunset-range::-moz-range-track {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--c-bed-3);
+  }
+
+  /* A ruled bed. The panel primitive of this world: hairlines, not cards. */
+  .bed {
+    background: var(--c-bed-1);
+    border: 1px solid var(--c-rule);
+    border-radius: 3px;
+  }
+  .bed-flat {
+    background: var(--c-bed-0);
+    border-top: 1px solid var(--c-rule);
+    border-bottom: 1px solid var(--c-rule);
+  }
+}
+
+/* ============================================================================
+   MOTION
+   One orchestrated grammar. Every entrance starts from an already-visible
+   default so a failed animation never hides content.
+   ========================================================================= */
+@layer utilities {
+  .anim-rise {
+    animation: rise var(--dur-slow) var(--ease-out) both;
+  }
+  .anim-fade {
+    animation: fade var(--dur-base) var(--ease-out) both;
+  }
+  .anim-draw {
+    animation: draw var(--dur-reveal) var(--ease-out) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes draw {
+    from {
+      stroke-dashoffset: var(--draw-length, 1000);
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes pulse-rule {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .stagger > * {
+    animation: rise var(--dur-slow) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 38ms);
+  }
+}
+
+/* Reduced motion is honored from two directions: the OS preference and the
+   in-product setting. Both collapse animation to an instant state change. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+[data-reduce-motion='true'] *,
+[data-reduce-motion='true'] *::before,
+[data-reduce-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}

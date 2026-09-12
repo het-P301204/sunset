@@ -1,0 +1,185 @@
+{
+  "sunsetFormat": "repo-scan",
+  "version": "1",
+  "synthetic": true,
+  "description": "SYNTHETIC repository crypto-discovery export authored for SUNSET development. No real repository was scanned.",
+  "repository": "payments-gateway",
+  "producer": "synthetic-repo-scanner 0.4.1",
+  "generatedAt": "2026-09-09T22:41:05Z",
+  "findings": [
+    {
+      "id": "scan-0001",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/tls/handshake.go",
+      "line": 118,
+      "algorithm": "ECDHE",
+      "primitive": "key-agree",
+      "protocol": "TLSv1.3",
+      "symbol": "tls.CurvePreferences",
+      "language": "go",
+      "functions": ["keygen", "key-agree"]
+    },
+    {
+      "id": "scan-0002",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/tls/handshake.go",
+      "line": 141,
+      "algorithm": "RSA",
+      "keySizeBits": 2048,
+      "primitive": "signature",
+      "protocol": "TLSv1.3",
+      "symbol": "x509.SignatureAlgorithm",
+      "language": "go",
+      "functions": ["sign", "verify"]
+    },
+    {
+      "id": "scan-0003",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/vault/seal.go",
+      "line": 62,
+      "algorithm": "AES-256-GCM",
+      "primitive": "block-cipher",
+      "symbol": "cipher.NewGCM",
+      "language": "go",
+      "functions": ["encrypt", "decrypt"]
+    },
+    {
+      "id": "scan-0004",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/token/jwt.go",
+      "line": 87,
+      "algorithm": "RS256",
+      "primitive": "signature",
+      "symbol": "jwt.SigningMethodRS256",
+      "language": "go",
+      "functions": ["sign", "verify"]
+    },
+    {
+      "id": "scan-0005",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/token/jwt.go",
+      "line": 104,
+      "algorithm": "ES256",
+      "primitive": "signature",
+      "curve": "secp256r1",
+      "symbol": "jwt.SigningMethodES256",
+      "language": "go",
+      "functions": ["sign", "verify"]
+    },
+    {
+      "id": "scan-0006",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/hsm/pkcs11.go",
+      "line": 233,
+      "algorithm": "RSA",
+      "keySizeBits": 4096,
+      "symbol": "C_Sign",
+      "language": "go"
+    },
+    {
+      "id": "scan-0007",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/legacy/iso8583.go",
+      "line": 512,
+      "algorithm": "3DES",
+      "keySizeBits": 168,
+      "primitive": "block-cipher",
+      "symbol": "des.NewTripleDESCipher",
+      "language": "go",
+      "functions": ["encrypt", "decrypt"]
+    },
+    {
+      "id": "scan-0008",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/legacy/iso8583.go",
+      "line": 540,
+      "algorithm": "SHA-1",
+      "primitive": "hash",
+      "symbol": "sha1.New",
+      "language": "go",
+      "functions": ["digest"]
+    },
+    {
+      "id": "scan-0009",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/keys/derive.go",
+      "line": 29,
+      "algorithm": "HKDF-SHA256",
+      "primitive": "kdf",
+      "symbol": "hkdf.New",
+      "language": "go",
+      "functions": ["key-derive"]
+    },
+    {
+      "id": "scan-0010",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/partner/sftp.go",
+      "line": 71,
+      "algorithm": "ssh-rsa",
+      "protocol": "SSHv2",
+      "symbol": "ssh.PublicKeys",
+      "language": "go"
+    },
+    {
+      "id": "scan-0011",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/partner/sftp.go",
+      "line": 93,
+      "algorithm": "curve25519-sha256",
+      "primitive": "key-agree",
+      "protocol": "SSHv2",
+      "symbol": "ssh.KeyExchanges",
+      "language": "go",
+      "functions": ["keygen", "key-agree"]
+    },
+    {
+      "id": "scan-0012",
+      "component": "payments-gateway",
+      "file": "vendor/acme-crypto/native/bridge.c",
+      "line": 1440,
+      "algorithm": "acme_seal_v3",
+      "symbol": "acme_seal_v3",
+      "language": "c",
+      "metadata": {
+        "note": "vendor binary blob, no source available"
+      }
+    },
+    {
+      "id": "scan-0013",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/pinning/certs.go",
+      "line": 18,
+      "algorithm": "ECDSA",
+      "curve": "secp384r1",
+      "primitive": "signature",
+      "symbol": "pinnedRoots",
+      "language": "go",
+      "functions": ["verify"]
+    },
+    {
+      "id": "scan-0014",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/ml/kem.go",
+      "line": 40,
+      "algorithm": "ML-KEM-768",
+      "primitive": "kem",
+      "symbol": "mlkem.GenerateKey",
+      "language": "go",
+      "functions": ["encapsulate", "decapsulate"],
+      "metadata": {
+        "note": "hybrid pilot branch, not enabled in production"
+      }
+    },
+    {
+      "id": "scan-0015",
+      "component": "payments-gateway",
+      "file": "services/payments-gateway/config/tls.yaml",
+      "line": 7,
+      "algorithm": "TLS_RSA_WITH_AES_128_CBC_SHA",
+      "protocol": "TLSv1.2",
+      "metadata": {
+        "note": "fallback suite retained for one partner"
+      }
+    }
+  ]
+}

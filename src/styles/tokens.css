@@ -1,0 +1,157 @@
+/* ============================================================================
+   SUNSET design tokens
+   The single source of truth for the visual system. Tailwind reads every value
+   from here, so a theme change is a token swap and never a class rewrite.
+
+   World: the core log. Ground is rock-dark, beds are separated by hairlines
+   rather than card edges, amber is reserved for deadline signal, and risk is
+   carried by hatch pattern first so severity survives grayscale.
+   ========================================================================= */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/Inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/Inter-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/JetBrainsMono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 100 800;
+  font-display: swap;
+  src: url('/fonts/JetBrainsMono-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+    U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* --- structure ------------------------------------------------------- */
+  --size-rail: 56px;
+  --size-topbar: 44px;
+  --size-foot: 26px;
+  --size-gutter: 20px;
+
+  /* --- motion ---------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-instant: 90ms;
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 420ms;
+  --dur-reveal: 640ms;
+
+  /* --- risk semantics (identical in both themes except for tuning) ------ */
+  --c-critical: #e5484d;
+  --c-high: #e8873c;
+  --c-medium: #d9a036;
+  --c-low: #5e7e9b;
+  --c-safe: #3e9d6c;
+  --c-unknown: #8b6fb8;
+}
+
+/* ---------------------------------------------------------------------------
+   DARK — the default. Chosen from the use scene, not from category habit:
+   this is read on a workstation in a dim room, for long stretches, next to a
+   terminal. Near-black rather than pure black so the bed layers can separate.
+   ------------------------------------------------------------------------ */
+[data-theme='dark'] {
+  --c-ground: #08090b;
+  --c-bed-0: #0c0e11;
+  --c-bed-1: #101216;
+  --c-bed-2: #16191f;
+  --c-bed-3: #1c2028;
+
+  --c-rule-faint: #171a20;
+  --c-rule: #23272f;
+  --c-rule-strong: #333943;
+
+  --c-ink: #e9e6e0;
+  --c-ink-dim: #aab0b9;
+  --c-ink-muted: #7b818b;
+  --c-ink-faint: #565c66;
+
+  --c-amber: #f0a03c;
+  --c-amber-dim: #a8722c;
+  --c-amber-wash: rgba(240, 160, 60, 0.09);
+  --c-amber-ink: #120b03;
+  --c-coral: #e8734a;
+
+  --c-critical: #ef5f63;
+  --c-high: #ef9448;
+  --c-medium: #dfad4a;
+  --c-low: #7595b1;
+  --c-safe: #4bb37e;
+  --c-unknown: #a083cc;
+
+  --c-selection: rgba(240, 160, 60, 0.26);
+  --c-scroll-thumb: #2b303a;
+  --c-scroll-thumb-hover: #3a4049;
+  --grain-opacity: 0.5;
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------
+   LIGHT — not an inversion. The same core log printed on buff log paper:
+   warm neutral ground, ink-brown rules, and a darker amber that still reads
+   as amber at 4.5:1 on paper. Risk hues are re-tuned, not reused.
+   ------------------------------------------------------------------------ */
+[data-theme='light'] {
+  --c-ground: #eeebe3;
+  --c-bed-0: #f4f1ea;
+  --c-bed-1: #faf8f3;
+  --c-bed-2: #e9e5db;
+  --c-bed-3: #ded9cc;
+
+  --c-rule-faint: #e2ddd1;
+  --c-rule: #cdc6b6;
+  --c-rule-strong: #a9a192;
+
+  --c-ink: #191b1f;
+  --c-ink-dim: #4a4f57;
+  --c-ink-muted: #6b7079;
+  --c-ink-faint: #8d929a;
+
+  --c-amber: #a25c12;
+  --c-amber-dim: #c98a3e;
+  --c-amber-wash: rgba(162, 92, 18, 0.09);
+  --c-amber-ink: #fdf8ef;
+  --c-coral: #b8452a;
+
+  --c-critical: #c02127;
+  --c-high: #b35d12;
+  --c-medium: #8a6a12;
+  --c-low: #3f5f7c;
+  --c-safe: #1f7a4f;
+  --c-unknown: #6244a0;
+
+  --c-selection: rgba(162, 92, 18, 0.2);
+  --c-scroll-thumb: #cdc6b6;
+  --c-scroll-thumb-hover: #b3ab99;
+  --grain-opacity: 0.35;
+  color-scheme: light;
+}

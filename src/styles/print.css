@@ -1,0 +1,101 @@
+/* ============================================================================
+   PRINT
+
+   The PDF export is the browser's own print pipeline against this stylesheet,
+   so the printed document is the same markup the operator reviewed on screen.
+   There is no second template to drift.
+
+   Paper is light whatever the screen theme is: a graphite ground would empty a
+   toner cartridge and read worse than the log sheet it is imitating.
+   ========================================================================= */
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 16mm 14mm;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  /* Force the paper palette regardless of the active theme. */
+  :root,
+  html[data-theme='dark'],
+  html[data-theme='light'] {
+    --c-ground: #ffffff;
+    --c-bed-0: #ffffff;
+    --c-bed-1: #ffffff;
+    --c-bed-2: #f4f2ed;
+    --c-bed-3: #ece8df;
+    --c-rule-faint: #dedad0;
+    --c-rule: #b8b2a4;
+    --c-rule-strong: #8b8577;
+    --c-ink: #111316;
+    --c-ink-dim: #35393f;
+    --c-ink-muted: #5c6169;
+    --c-ink-faint: #82878f;
+    --c-amber: #8a4d0c;
+    --c-amber-dim: #a9702c;
+    --c-critical: #a5121a;
+    --c-high: #8a4308;
+    --c-medium: #6b5209;
+    --c-low: #2f4d68;
+    --c-safe: #17603c;
+    --c-unknown: #4b3288;
+  }
+
+  /* Everything that is chrome rather than content. */
+  header:not(.report header),
+  footer:not(.report footer),
+  nav,
+  aside.report-controls,
+  [role='dialog'],
+  [role='tooltip'] {
+    display: none !important;
+  }
+
+  /* Unwrap the app shell so the report is the whole document. */
+  #root > div {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  main {
+    overflow: visible !important;
+  }
+
+  #sunset-report {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+    background: #ffffff !important;
+  }
+
+  .report section {
+    break-inside: avoid;
+  }
+  .report table {
+    break-inside: auto;
+  }
+  .report tr {
+    break-inside: avoid;
+  }
+  .report thead {
+    display: table-header-group;
+  }
+
+  a[href]::after {
+    content: '';
+  }
+
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-shadow: none !important;
+  }
+}

@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+.vite/
+
+# Impeccable working directories: review captures and local config are build
+# artefacts, not source. The surface briefs under .impeccable/surfaces/ are
+# kept, because they are the durable record of why this looks the way it does.
+.impeccable/review/
+.impeccable/build/
+.impeccable/mocks/
+.impeccable/config.local.json
+.impeccable/payload-*.json
+.impeccable/brief-body.md
+.playwright-mcp/
+
+# Scratch
+gf.css
