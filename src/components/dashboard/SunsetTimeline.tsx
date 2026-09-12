@@ -25,6 +25,11 @@ import { FindingCard } from './FindingCard';
    into the two reasons that are not the same thing: NOT SCORED (a required
    input was absent) and NO DEADLINE (assessed, but no published instrument
    sets a date for it). Both are drawn to scale and neither is ever omitted.
+
+   Reading it is a two-column problem. The lane margin never scrolls, because a
+   row label that slides out of view takes the meaning of its row with it; only
+   the plot scrolls, and the two halves share their row constants so they stay
+   registered.
    ========================================================================= */
 
 const LANES: { id: ThreatClass; label: string }[] = [
@@ -34,14 +39,26 @@ const LANES: { id: ThreatClass; label: string }[] = [
   { id: 'hash', label: 'HASH' },
 ];
 
-const PAD_LEFT = 128;
-const PAD_RIGHT = 24;
-const RULER_HEIGHT = 34;
-const LANE_HEIGHT = 62;
-const VOID_HEIGHT = 44;
-const NODE = 6;
-const NODE_GAP = 1.5;
-const MAX_STACK = 6;
+/** Shared row geometry. The margin and the plot both measure from these. */
+const MARGIN_W = 136;
+const PAD_RIGHT = 26;
+const RULER_H = 38;
+const LANE_H = 78;
+const VOID_H = 48;
+const MIN_PLOT_W = 660;
+
+/** A bed. Big enough to read as a block rather than as dust. */
+const NODE = 9;
+const NODE_GAP = 2;
+const CELL = NODE + NODE_GAP;
+const MAX_STACK = 4;
+
+interface Cluster {
+  laneIndex: number;
+  year: number;
+  findings: Finding[];
+  columns: number;
+}
 
 interface PlacedNode {
   finding: Finding;
@@ -62,150 +79,250 @@ export function SunsetTimeline({
   selectedId?: string | null;
   compact?: boolean;
 }) {
-  const [ref, { width }] = useMeasure<HTMLDivElement>();
+  const [scrollRef, { width: viewport }] = useMeasure<HTMLDivElement>();
   const [hovered, setHovered] = useState<PlacedNode | null>(null);
   const reduced = useReducedMotion();
 
   const lanes = compact ? LANES.slice(0, 2) : LANES;
-  const height = RULER_HEIGHT + lanes.length * LANE_HEIGHT + VOID_HEIGHT;
-  const plotWidth = Math.max(240, width - PAD_LEFT - PAD_RIGHT);
-  const scale = (year: number) =>
-    PAD_LEFT +
-    ((clamp(year, TIMELINE_START, TIMELINE_END) - TIMELINE_START) /
-      (TIMELINE_END - TIMELINE_START)) *
-      plotWidth;
-
+  const height = RULER_H + lanes.length * LANE_H + VOID_H;
+  const plotWidth = Math.max(MIN_PLOT_W, viewport - PAD_RIGHT);
   const analysisYear = new Date(analysis.analysedAt).getUTCFullYear();
 
-  const { placed, notScored, noDeadline } = useMemo(
-    () => placeFindings(analysis, lanes, scale, width),
+  const years = useMemo(() => {
+    const out: number[] = [];
+    for (let y = TIMELINE_START; y <= TIMELINE_END; y += 1) out.push(y);
+    return out;
+  }, []);
+
+  const span = TIMELINE_END - TIMELINE_START;
+  const scale = (year: number) =>
+    ((clamp(year, TIMELINE_START, TIMELINE_END) - TIMELINE_START) / span) * plotWidth;
+  const yearWidth = plotWidth / span;
+
+  const { clusters, placed, notScored, noDeadline } = useMemo(
+    () => place(analysis, lanes, scale, plotWidth),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [analysis, width, compact],
+    [analysis, plotWidth, compact],
   );
   const offAxis = notScored.length + noDeadline.length;
 
-  const years: number[] = [];
-  for (let y = TIMELINE_START; y <= TIMELINE_END; y += 1) years.push(y);
-
   return (
-    // Below roughly a tablet the column cannot hold ten year labels and four
-    // lane names without collapsing into overlap. It keeps its proportions and
-    // scrolls instead: squeezing a time axis until the years touch is worse
-    // than asking for a swipe.
-    <div className="w-full overflow-x-auto">
-      <div ref={ref} className="relative min-w-[780px] select-none">
-        {width > 0 ? (
-        <svg
-          width={width}
-          height={height}
-          role="img"
-          aria-label={`Migration timeline from ${TIMELINE_START} to ${TIMELINE_END}. ${placed.length} findings plotted by the year their migration must start. ${notScored.length} could not be scored and ${noDeadline.length} are governed by no published deadline, so neither group has a position on this axis.`}
-          className="block overflow-visible"
-        >
-          {/* ---- year ruler ------------------------------------------------ */}
-          <g>
+    <div className="flex w-full select-none">
+      {/* ---- the margin: lane identity and per-class recovery, never scrolls -- */}
+      <div className="shrink-0" style={{ width: MARGIN_W }}>
+        <svg width={MARGIN_W} height={height} aria-hidden="true" className="block">
+          {lanes.map((lane, index) => {
+            const top = RULER_H + index * LANE_H;
+            const total = analysis.findings.filter((f) => f.threatClass === lane.id).length;
+            const count = placed.filter((p) => p.finding.threatClass === lane.id).length;
+            const pct = total === 0 ? 0 : Math.round((count / total) * 100);
+            return (
+              <g key={lane.id}>
+                <line
+                  x1={0}
+                  y1={top + LANE_H - 0.5}
+                  x2={MARGIN_W}
+                  y2={top + LANE_H - 0.5}
+                  stroke="var(--c-rule-faint)"
+                />
+                <text
+                  x={0}
+                  y={top + 22}
+                  className="t-data"
+                  fontSize="9"
+                  letterSpacing="0.1em"
+                  fill="var(--c-ink-dim)"
+                >
+                  {lane.label}
+                </text>
+                {/* Per-class recovery, the way a driller's log records it run by
+                    run rather than once for the whole hole. */}
+                <text
+                  x={MARGIN_W - 22}
+                  y={top + 38}
+                  textAnchor="end"
+                  className="t-data"
+                  fontSize="13"
+                  fill={pct === 0 ? 'var(--c-ink-faint)' : 'var(--c-ink-dim)'}
+                >
+                  {pct}
+                  <tspan fontSize="9" fill="var(--c-ink-faint)">
+                    %
+                  </tspan>
+                </text>
+                <rect x={0} y={top + 44} width={MARGIN_W - 22} height={3} fill="var(--c-bed-2)" />
+                <rect
+                  x={0}
+                  y={top + 44}
+                  width={total === 0 ? 0 : ((MARGIN_W - 22) * count) / total}
+                  height={3}
+                  fill="var(--c-ink-muted)"
+                />
+                <text
+                  x={0}
+                  y={top + 60}
+                  className="t-data"
+                  fontSize="9"
+                  fill="var(--c-ink-faint)"
+                >
+                  {count} of {total} on axis
+                </text>
+              </g>
+            );
+          })}
+
+          <text
+            x={0}
+            y={height - VOID_H + 22}
+            className="t-data"
+            fontSize="9"
+            letterSpacing="0.1em"
+            fill="var(--c-unknown)"
+          >
+            OFF AXIS
+          </text>
+          <text
+            x={0}
+            y={height - VOID_H + 36}
+            className="t-data"
+            fontSize="13"
+            fill="var(--c-ink-dim)"
+          >
+            {offAxis}
+          </text>
+        </svg>
+      </div>
+
+      {/* ---- the plot: scrolls on its own ----------------------------------- */}
+      <div ref={scrollRef} className="relative min-w-0 flex-1 overflow-x-auto">
+        {viewport > 0 ? (
+          <svg
+            width={plotWidth}
+            height={height}
+            role="img"
+            aria-label={`Migration timeline from ${TIMELINE_START} to ${TIMELINE_END}. ${placed.length} findings plotted by the year their migration must start. ${notScored.length} could not be scored and ${noDeadline.length} are governed by no published deadline, so neither group has a position on this axis.`}
+            className="block"
+          >
+            {/* Alternating year columns. Without them a block three lanes down
+                cannot be tied to a year without tracing all the way up. */}
+            {years.slice(0, -1).map((year, i) =>
+              i % 2 === 0 ? (
+                <rect
+                  key={`band-${year}`}
+                  x={scale(year)}
+                  y={RULER_H - 8}
+                  width={yearWidth}
+                  height={height - VOID_H - RULER_H + 8}
+                  fill="var(--c-bed-0)"
+                />
+              ) : null,
+            )}
+
+            {/* Everything before today. The work cannot start in the past, so
+                the region reads as unavailable rather than as empty. */}
+            <rect
+              x={0}
+              y={RULER_H - 8}
+              width={scale(analysisYear)}
+              height={height - VOID_H - RULER_H + 8}
+              fill="url(#hx-unknown)"
+              opacity="0.25"
+            />
+
+            {/* ---- year ruler ---------------------------------------------- */}
             <line
-              x1={PAD_LEFT}
-              y1={RULER_HEIGHT - 0.5}
-              x2={PAD_LEFT + plotWidth}
-              y2={RULER_HEIGHT - 0.5}
+              x1={0}
+              y1={RULER_H - 0.5}
+              x2={plotWidth}
+              y2={RULER_H - 0.5}
               stroke="var(--c-rule-strong)"
-              strokeWidth="1"
               style={
                 reduced
                   ? undefined
                   : {
                       strokeDasharray: plotWidth,
-                      strokeDashoffset: 0,
-                      animation: `tl-draw 700ms var(--ease-out) both`,
+                      animation: 'tl-draw 700ms var(--ease-out) both',
                     }
               }
             />
             {years.map((year) => {
               const x = scale(year);
               const isNow = year === analysisYear;
+              const last = year === TIMELINE_END;
               return (
                 <g key={year}>
                   <line
                     x1={x}
-                    y1={RULER_HEIGHT - 6}
+                    y1={RULER_H - 7}
                     x2={x}
-                    y2={RULER_HEIGHT}
+                    y2={RULER_H}
                     stroke="var(--c-rule-strong)"
-                    strokeWidth="1"
                   />
                   <text
-                    x={x}
-                    y={RULER_HEIGHT - 12}
-                    textAnchor="middle"
+                    x={x + (last ? -4 : 4)}
+                    y={RULER_H - 13}
+                    textAnchor={last ? 'end' : 'start'}
                     className="t-data"
-                    fontSize="10"
-                    letterSpacing="0.06em"
-                    fill={isNow ? 'var(--c-ink-dim)' : 'var(--c-ink-faint)'}
+                    fontSize="11"
+                    letterSpacing="0.04em"
+                    fill={isNow ? 'var(--c-ink)' : 'var(--c-ink-faint)'}
                   >
                     {year}
                   </text>
                 </g>
               );
             })}
-          </g>
 
-          {/* ---- marker horizons ------------------------------------------- */}
-          {DEADLINES.filter((d) => d.effect !== 'deprecated').map((deadline, i) => {
-            const x = scale(deadline.year);
-            const milestone = deadline.effect === 'milestone';
-            const flip = x > width - 170;
-            return (
-              <g
-                key={deadline.id}
-                style={
-                  reduced
-                    ? undefined
-                    : { animation: `tl-horizon 420ms var(--ease-out) ${700 + i * 90}ms both` }
-                }
-              >
-                <line
-                  x1={x}
-                  y1={RULER_HEIGHT - 6}
-                  x2={x}
-                  y2={height - VOID_HEIGHT}
-                  stroke={milestone ? 'var(--c-rule-strong)' : 'var(--c-amber)'}
-                  strokeWidth={milestone ? 1 : 1.5}
-                  strokeDasharray={milestone ? '3 3' : undefined}
-                  opacity={milestone ? 0.8 : 0.9}
-                />
-                {/* The last horizon sits on the right edge, so its label reads
-                    back into the plot rather than off the end of it. */}
-                <text
-                  x={x + (flip ? -5 : 5)}
-                  y={RULER_HEIGHT + 11}
-                  textAnchor={flip ? 'end' : 'start'}
-                  className="t-data"
-                  fontSize="9"
-                  letterSpacing="0.12em"
-                  fill={milestone ? 'var(--c-ink-faint)' : 'var(--c-amber)'}
+            {/* ---- marker horizons ----------------------------------------- */}
+            {DEADLINES.filter((d) => d.effect !== 'deprecated').map((deadline, i) => {
+              const x = scale(deadline.year);
+              const milestone = deadline.effect === 'milestone';
+              const flip = x > plotWidth - 180;
+              return (
+                <g
+                  key={deadline.id}
+                  style={
+                    reduced
+                      ? undefined
+                      : { animation: `tl-horizon 420ms var(--ease-out) ${700 + i * 90}ms both` }
+                  }
                 >
-                  {deadline.label}
-                </text>
-              </g>
-            );
-          })}
+                  <line
+                    x1={x}
+                    y1={RULER_H - 7}
+                    x2={x}
+                    y2={height - VOID_H}
+                    stroke={milestone ? 'var(--c-rule-strong)' : 'var(--c-amber)'}
+                    strokeWidth={milestone ? 1 : 1.5}
+                    strokeDasharray={milestone ? '3 3' : undefined}
+                  />
+                  <text
+                    x={x + (flip ? -6 : 6)}
+                    y={RULER_H + 13}
+                    textAnchor={flip ? 'end' : 'start'}
+                    className="t-data"
+                    fontSize="9"
+                    letterSpacing="0.1em"
+                    fill={milestone ? 'var(--c-ink-faint)' : 'var(--c-amber)'}
+                  >
+                    {deadline.label}
+                  </text>
+                </g>
+              );
+            })}
 
-          {/* ---- the present -------------------------------------------- */}
-          <g>
+            {/* ---- the present --------------------------------------------- */}
             <line
               x1={scale(analysisYear)}
-              y1={RULER_HEIGHT - 6}
+              y1={RULER_H - 7}
               x2={scale(analysisYear)}
-              y2={height - VOID_HEIGHT}
+              y2={height - VOID_H}
               stroke="var(--c-ink-dim)"
-              strokeWidth="1"
-              strokeDasharray="1 3"
-              opacity="0.5"
+              strokeDasharray="2 3"
             />
             <text
-              x={scale(analysisYear) - 5}
-              y={RULER_HEIGHT + 11}
+              x={scale(analysisYear) - 6}
+              y={RULER_H + 13}
               textAnchor="end"
               className="t-data"
               fontSize="9"
@@ -214,99 +331,89 @@ export function SunsetTimeline({
             >
               NOW
             </text>
-          </g>
 
-          {/* ---- lanes ------------------------------------------------------ */}
-          {lanes.map((lane, index) => {
-            const top = RULER_HEIGHT + index * LANE_HEIGHT;
-            const count = placed.filter((p) => p.finding.threatClass === lane.id).length;
-            const total = analysis.findings.filter((f) => f.threatClass === lane.id).length;
-            return (
-              <g key={lane.id}>
-                <line
-                  x1={0}
-                  y1={top + LANE_HEIGHT - 0.5}
-                  x2={width}
-                  y2={top + LANE_HEIGHT - 0.5}
-                  stroke="var(--c-rule-faint)"
-                  strokeWidth="1"
-                />
-                <text
-                  x={0}
-                  y={top + LANE_HEIGHT - 27}
-                  className="t-data"
-                  fontSize="9"
-                  letterSpacing="0.12em"
-                  fill="var(--c-ink-muted)"
-                >
-                  {lane.label}
-                </text>
-                {/* Per-class recovery, the way a driller's log records it run
-                    by run rather than only as one figure for the hole. The bar
-                    is the fraction of this class that made it onto the axis;
-                    the rest is drawn in the OFF AXIS band below. */}
-                <text
-                  x={0}
-                  y={top + LANE_HEIGHT - 27}
-                  className="t-data"
-                  fontSize="10"
-                  fill="var(--c-ink-faint)"
-                  textAnchor="start"
-                  dx={PAD_LEFT - 30}
-                >
-                  {total === 0 ? '' : `${Math.round((count / total) * 100)}%`}
-                </text>
-                <rect
-                  x={0}
-                  y={top + LANE_HEIGHT - 19}
-                  width={PAD_LEFT - 20}
-                  height={3}
-                  fill="var(--c-bed-2)"
-                />
-                <rect
-                  x={0}
-                  y={top + LANE_HEIGHT - 19}
-                  width={total === 0 ? 0 : ((PAD_LEFT - 20) * count) / total}
-                  height={3}
-                  fill="var(--c-ink-muted)"
-                />
-                <text
-                  x={0}
-                  y={top + LANE_HEIGHT - 7}
-                  className="t-data"
-                  fontSize="9"
-                  fill="var(--c-ink-faint)"
-                >
-                  {count} of {total} on axis
-                </text>
-                {count === 0 && total > 0 ? (
-                  <>
+            {/* ---- lane rules and empty-lane notes -------------------------- */}
+            {lanes.map((lane, index) => {
+              const top = RULER_H + index * LANE_H;
+              const count = placed.filter((p) => p.finding.threatClass === lane.id).length;
+              const total = analysis.findings.filter((f) => f.threatClass === lane.id).length;
+              const note = emptyLaneNote(lane.id, notScored, noDeadline);
+              return (
+                <g key={lane.id}>
+                  <line
+                    x1={0}
+                    y1={top + LANE_H - 0.5}
+                    x2={plotWidth}
+                    y2={top + LANE_H - 0.5}
+                    stroke="var(--c-rule-faint)"
+                  />
+                  {count === 0 && total > 0 ? (
+                    <>
+                      <rect
+                        x={8}
+                        y={top + LANE_H / 2 - 8}
+                        width={note.length * 6.05 + 12}
+                        height={16}
+                        fill="var(--c-ground)"
+                      />
+                      <text
+                        x={14}
+                        y={top + LANE_H / 2 + 3}
+                        className="t-data"
+                        fontSize="10"
+                        fill="var(--c-ink-faint)"
+                      >
+                        {note}
+                      </text>
+                    </>
+                  ) : null}
+                </g>
+              );
+            })}
+
+            {/* ---- cluster counts ------------------------------------------ */}
+            {clusters
+              .filter((cluster) => cluster.findings.length > 1)
+              .map((cluster) => {
+                const cx = scale(cluster.year);
+                const top = RULER_H + cluster.laneIndex * LANE_H;
+                const y =
+                  top + LANE_H - 12 - Math.min(cluster.findings.length, MAX_STACK) * CELL - 4;
+                const label = String(cluster.findings.length);
+                return (
+                  <g
+                    key={`n-${cluster.laneIndex}-${cluster.year}`}
+                    style={
+                      reduced
+                        ? undefined
+                        : { animation: 'tl-void 400ms var(--ease-out) 1200ms both' }
+                    }
+                  >
                     <rect
-                      x={PAD_LEFT + 4}
-                      y={top + LANE_HEIGHT / 2 - 7}
-                      width={emptyLaneNote(lane.id, notScored, noDeadline).length * 6.05 + 10}
-                      height={14}
+                      x={cx - label.length * 3.6 - 3}
+                      y={y - 10}
+                      width={label.length * 7.2 + 6}
+                      height={13}
                       fill="var(--c-ground)"
                     />
                     <text
-                      x={PAD_LEFT + 8}
-                      y={top + LANE_HEIGHT / 2 + 3}
+                      x={cx}
+                      y={y}
+                      textAnchor="middle"
                       className="t-data"
-                      fontSize="10"
-                      fill="var(--c-ink-faint)"
+                      fontSize="11"
+                      fill="var(--c-ink-dim)"
                     >
-                      {emptyLaneNote(lane.id, notScored, noDeadline)}
+                      {label}
                     </text>
-                  </>
-                ) : null}
-              </g>
-            );
-          })}
+                  </g>
+                );
+              })}
 
-          {/* ---- findings --------------------------------------------------- */}
-          <g>
+            {/* ---- findings ------------------------------------------------- */}
             {placed.map((node) => {
               const selected = selectedId === node.finding.id;
+              const dimmed = hovered && hovered.finding.id !== node.finding.id;
               return (
                 <rect
                   key={node.finding.id}
@@ -314,12 +421,17 @@ export function SunsetTimeline({
                   y={node.y}
                   width={NODE}
                   height={NODE}
-                  fill={node.hollow ? 'transparent' : hatchFill(node.finding.severity)}
-                  stroke={SEVERITY_VAR[node.finding.severity]}
-                  strokeWidth={selected ? 1.6 : node.hollow ? 1 : 0.8}
-                  strokeDasharray={node.hollow ? '1.5 1' : undefined}
-                  className="cursor-pointer transition-opacity duration-fast"
-                  opacity={hovered && hovered.finding.id !== node.finding.id ? 0.45 : 1}
+                  rx={1}
+                  fill={node.hollow ? 'var(--c-bed-1)' : hatchFill(node.finding.severity)}
+                  stroke={
+                    selected || (hovered && hovered.finding.id === node.finding.id)
+                      ? 'var(--c-amber)'
+                      : SEVERITY_VAR[node.finding.severity]
+                  }
+                  strokeWidth={selected ? 2 : 1}
+                  strokeDasharray={node.hollow ? '2 1.5' : undefined}
+                  className="cursor-pointer"
+                  opacity={dimmed ? 0.35 : 1}
                   tabIndex={0}
                   role="button"
                   aria-label={`${node.finding.asset.algorithm} on ${node.finding.asset.name}, ${node.finding.severity}`}
@@ -337,150 +449,90 @@ export function SunsetTimeline({
                   style={
                     reduced
                       ? undefined
-                      : {
-                          animation: `tl-node 320ms var(--ease-out) ${1000 + node.order * 7}ms both`,
-                        }
+                      : { animation: `tl-node 320ms var(--ease-out) ${1000 + node.order * 7}ms both` }
                   }
                 />
               );
             })}
-          </g>
 
-          {/* ---- OFF-AXIS ---------------------------------------------------
-              Two intervals, drawn to scale against each other, because they say
-              different things. NOT SCORED is the core that did not come back.
-              NO DEADLINE is material that was recovered intact but that no
-              published instrument governs, so it has no date to be plotted at.
-              Merging them into one band would report a coverage failure where
-              there is none.                                                  */}
-          <g
-            style={
-              reduced ? undefined : { animation: 'tl-void 500ms var(--ease-out) 1150ms both' }
-            }
-          >
-            {[
-              {
-                key: 'not-scored',
-                label: 'NOT SCORED',
-                count: notScored.length,
-                fill: 'url(#hx-unknown)',
-                stroke: 'var(--c-unknown)',
-                caption: 'a required input was absent',
-              },
-              {
-                key: 'no-deadline',
-                label: 'NO DEADLINE',
-                count: noDeadline.length,
-                fill: 'url(#hx-partial)',
-                stroke: 'var(--c-ink-muted)',
-                caption: 'assessed, but no instrument sets a date',
-              },
-            ]
-              .filter((band) => band.count > 0)
-              .map((band, i, all) => {
+            {/* ---- OFF AXIS -------------------------------------------------
+                Two intervals, drawn to scale against each other, because they
+                say different things. NOT SCORED is the core that did not come
+                back. NO DEADLINE is material that was recovered intact but
+                that no published instrument governs. Merging them would
+                report a coverage failure where there is none.              */}
+            <g
+              style={reduced ? undefined : { animation: 'tl-void 500ms var(--ease-out) 1150ms both' }}
+            >
+              {offAxisBands(notScored.length, noDeadline.length).map((band, i, all) => {
                 const totalOff = all.reduce((sum, b) => sum + b.count, 0) || 1;
                 const before = all.slice(0, i).reduce((sum, b) => sum + b.count, 0);
-                const x = PAD_LEFT + (before / totalOff) * plotWidth;
+                const x = (before / totalOff) * plotWidth;
                 const w = (band.count / totalOff) * plotWidth;
+                const full = `${band.count} ${band.label} · ${band.caption}`;
+                const short = `${band.count} ${band.label}`;
+                const fits = w > full.length * 6.4 + 24;
+                const text = fits ? full : short;
                 return (
                   <g key={band.key}>
                     <rect
                       x={x}
-                      y={height - VOID_HEIGHT + 8}
+                      y={height - VOID_H + 10}
                       width={w}
-                      height={VOID_HEIGHT - 18}
+                      height={VOID_H - 20}
                       fill={band.fill}
                     />
                     <rect
                       x={x}
-                      y={height - VOID_HEIGHT + 8}
+                      y={height - VOID_H + 10}
                       width={w}
-                      height={VOID_HEIGHT - 18}
+                      height={VOID_H - 20}
                       fill="none"
                       stroke={band.stroke}
-                      strokeWidth="1"
                       strokeDasharray="3 3"
-                      opacity="0.75"
                     />
-                    {w > 150 ? (
+                    {w > 120 ? (
                       <>
-                        {/* The label sits on top of a hatch, so it gets its own
-                            ground. Reading text straight off a ruling is how a
-                            log sheet becomes unreadable at the one place the
-                            reader most needs it. */}
                         <rect
-                          x={x + 4}
-                          y={height - VOID_HEIGHT + 15}
-                          width={Math.min(
-                            w - 8,
-                            `${band.count} ${band.label} · ${band.caption}`.length * 6.05 + 14,
-                          )}
-                          height={14}
+                          x={x + 6}
+                          y={height - VOID_H + 17}
+                          width={Math.min(w - 12, text.length * 6.4 + 12)}
+                          height={15}
                           fill="var(--c-ground)"
                         />
                         <text
-                          x={x + 8}
-                          y={height - VOID_HEIGHT + 25}
+                          x={x + 11}
+                          y={height - VOID_H + 28}
                           className="t-data"
-                          fontSize="10"
+                          fontSize="11"
                           fill={band.stroke}
                         >
-                          {band.count} {band.label}
-                          <tspan fill="var(--c-ink-faint)"> &#183; {band.caption}</tspan>
+                          {text}
                         </text>
                       </>
-                    ) : (
-                      <text
-                        x={x + 6}
-                        y={height - VOID_HEIGHT + 25}
-                        className="t-data"
-                        fontSize="10"
-                        fill={band.stroke}
-                      >
-                        {band.count}
-                      </text>
-                    )}
+                    ) : null}
                   </g>
                 );
               })}
-            <text
-              x={0}
-              y={height - VOID_HEIGHT + 20}
-              className="t-data"
-              fontSize="9"
-              letterSpacing="0.12em"
-              fill="var(--c-unknown)"
-            >
-              OFF AXIS
-            </text>
-            <text
-              x={0}
-              y={height - VOID_HEIGHT + 32}
-              className="t-data"
-              fontSize="10"
-              fill="var(--c-ink-faint)"
-            >
-              {offAxis}
-            </text>
-          </g>
+            </g>
 
-          <style>{`
-            @keyframes tl-draw { from { stroke-dashoffset: ${plotWidth} } to { stroke-dashoffset: 0 } }
-            @keyframes tl-horizon { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: none } }
-            @keyframes tl-node { from { opacity: 0; transform: translateY(3px) } to { opacity: 1; transform: none } }
-            @keyframes tl-void { from { opacity: 0 } to { opacity: 1 } }
-          `}</style>
-        </svg>
+            <style>{`
+              @keyframes tl-draw { from { stroke-dashoffset: ${plotWidth} } to { stroke-dashoffset: 0 } }
+              @keyframes tl-horizon { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: none } }
+              @keyframes tl-node { from { opacity: 0; transform: translateY(3px) } to { opacity: 1; transform: none } }
+              @keyframes tl-void { from { opacity: 0 } to { opacity: 1 } }
+            `}</style>
+          </svg>
         ) : (
-          <div className="h-[280px]" />
+          <div style={{ height }} />
         )}
 
         {hovered ? (
           <div
             className="pointer-events-none absolute z-toast w-[22rem]"
             style={{
-              left: Math.min(Math.max(8, hovered.x - 168), Math.max(8, width - 360)),
-              top: hovered.y + 14,
+              left: Math.min(Math.max(4, hovered.x - 168), Math.max(4, plotWidth - 356)),
+              top: hovered.y + 18,
             }}
           >
             <FindingCard finding={hovered.finding} />
@@ -491,67 +543,108 @@ export function SunsetTimeline({
   );
 }
 
+function offAxisBands(notScored: number, noDeadline: number) {
+  return [
+    {
+      key: 'not-scored',
+      label: 'NOT SCORED',
+      caption: 'a required input was absent',
+      count: notScored,
+      fill: 'url(#hx-unknown)',
+      stroke: 'var(--c-unknown)',
+    },
+    {
+      key: 'no-deadline',
+      label: 'NO DEADLINE',
+      caption: 'assessed, but no instrument sets a date',
+      count: noDeadline,
+      fill: 'url(#hx-partial)',
+      stroke: 'var(--c-ink-muted)',
+    },
+  ].filter((b) => b.count > 0);
+}
+
 /**
- * Places every finding that has a position, and returns the rest untouched.
- * Nodes stack upward from each lane's baseline in columns, which is what gives
- * a dense year its visible thickness — the bed is thicker where more of the
- * estate has to be cut in that year.
+ * Two passes: bin the findings so a cluster's width is known, then place each
+ * block so the group sits centred on its year. Blocks stack upward from the
+ * lane baseline and wrap into a new column every MAX_STACK, which is what
+ * gives a heavy year its visible thickness — the bed is thicker where more of
+ * the estate has to be cut in that year.
  */
-function placeFindings(
+function place(
   analysis: AnalysisResult,
   lanes: { id: ThreatClass }[],
   scale: (year: number) => number,
-  width: number,
-): { placed: PlacedNode[]; notScored: Finding[]; noDeadline: Finding[] } {
-  const placed: PlacedNode[] = [];
+  plotWidth: number,
+): {
+  clusters: Cluster[];
+  placed: PlacedNode[];
+  notScored: Finding[];
+  noDeadline: Finding[];
+} {
   const notScored: Finding[] = [];
   const noDeadline: Finding[] = [];
-  if (width <= 0) return { placed, notScored: analysis.findings, noDeadline };
+  if (plotWidth <= 0) {
+    return { clusters: [], placed: [], notScored: analysis.findings, noDeadline };
+  }
 
   const laneIndex = new Map(lanes.map((l, i) => [l.id, i]));
-  const bins = new Map<string, number>();
+  const bins = new Map<string, Cluster>();
 
-  // Critical first, so the entrance animation resolves in severity order and
-  // the operator's eye lands on the worst material first.
+  // Critical first, so the entrance resolves in severity order and the eye
+  // lands on the worst material first.
   const ordered = [...analysis.findings].sort(
     (a, b) => (b.urgencyScore ?? -1) - (a.urgencyScore ?? -1) || a.id.localeCompare(b.id),
   );
 
-  ordered.forEach((finding, order) => {
+  for (const finding of ordered) {
     const index = laneIndex.get(finding.threatClass);
     const deadlineYear = finding.anchor?.deadline.year ?? null;
 
     if (finding.urgencyScore === null) {
       notScored.push(finding);
-      return;
+      continue;
     }
     if (index === undefined || deadlineYear === null) {
       noDeadline.push(finding);
-      return;
+      continue;
     }
 
     const effort = finding.mosca.migrationYears;
-    const startYear =
-      effort !== null ? Math.round(deadlineYear - effort - 0.25) : deadlineYear;
-    const binYear = clamp(startYear, TIMELINE_START, TIMELINE_END);
-    const key = `${finding.threatClass}:${binYear}`;
-    const seat = bins.get(key) ?? 0;
-    bins.set(key, seat + 1);
+    const startYear = effort !== null ? Math.round(deadlineYear - effort - 0.25) : deadlineYear;
+    const year = clamp(startYear, TIMELINE_START, TIMELINE_END);
+    const key = `${index}:${year}`;
+    const cluster = bins.get(key) ?? { laneIndex: index, year, findings: [], columns: 0 };
+    cluster.findings.push(finding);
+    bins.set(key, cluster);
+  }
 
-    const column = Math.floor(seat / MAX_STACK);
-    const row = seat % MAX_STACK;
-    const baseline = RULER_HEIGHT + index * LANE_HEIGHT + LANE_HEIGHT - 8;
+  const clusters = [...bins.values()];
+  for (const cluster of clusters) {
+    cluster.columns = Math.ceil(cluster.findings.length / MAX_STACK);
+  }
 
-    placed.push({
-      finding,
-      x: scale(binYear) - NODE / 2 + column * (NODE + NODE_GAP) - 1,
-      y: baseline - (row + 1) * (NODE + NODE_GAP),
-      hollow: effort === null,
-      order,
+  const placed: PlacedNode[] = [];
+  let order = 0;
+  for (const cluster of clusters) {
+    const groupW = cluster.columns * CELL - NODE_GAP;
+    const left = scale(cluster.year) - groupW / 2;
+    const baseline = RULER_H + cluster.laneIndex * LANE_H + LANE_H - 12;
+
+    cluster.findings.forEach((finding, seat) => {
+      const column = Math.floor(seat / MAX_STACK);
+      const row = seat % MAX_STACK;
+      placed.push({
+        finding,
+        x: left + column * CELL,
+        y: baseline - (row + 1) * CELL,
+        hollow: finding.mosca.migrationYears === null,
+        order: order++,
+      });
     });
-  });
+  }
 
-  return { placed, notScored, noDeadline };
+  return { clusters, placed, notScored, noDeadline };
 }
 
 /**
