@@ -4,8 +4,9 @@ dist/
 *.local
 .vite/
 
-# Design-tooling scratch. DESIGN.md is the published record of the visual
-# system; everything under .impeccable/ is the workshop that produced it.
+# Editor and design-tooling scratch. DESIGN.md is the published record of the
+# visual system; everything under .impeccable/ is the workshop that made it.
+.claude/
 .impeccable/
 .playwright-mcp/
 
