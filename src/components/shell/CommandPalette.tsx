@@ -6,6 +6,7 @@ import { VIEWS, type ViewId } from '@/state/views';
 import { FIXTURES } from '@/fixtures';
 import { SeverityMark } from '@/components/shared/Hatch';
 import { useFocusTrap } from '@/hooks/useKeyboard';
+import { applyThemeWithWave, originOf, resolveTheme } from '@/state/theme';
 import type { Finding, Severity, ThreatClass } from '@/types/domain';
 
 /* ============================================================================
@@ -152,11 +153,18 @@ export function CommandPalette({
         group: 'ACTION',
         label: 'Switch theme',
         keywords: 'theme dark light appearance',
-        run: () =>
-          dispatch({
-            type: 'settings',
-            patch: { theme: state.settings.theme === 'light' ? 'dark' : 'light' },
-          }),
+        run: () => {
+          const next = resolveTheme(state.settings.theme) === 'dark' ? 'light' : 'dark';
+          // Invoked from the keyboard, so there is no pointer to start from.
+          // The rail's own toggle is the honest origin: it is the control this
+          // command stands in for.
+          const anchor =
+            document.querySelector('[aria-label^="Switch to"]') ??
+            document.querySelector('nav[aria-label="Sections"]');
+          applyThemeWithWave(next, originOf(anchor), () =>
+            dispatch({ type: 'settings', patch: { theme: next } }),
+          );
+        },
       },
     );
 

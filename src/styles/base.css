@@ -316,8 +316,34 @@
   }
 }
 
+/* ============================================================================
+   THEME WAVE
+   The default view transition is a cross-fade, which on two palettes this far
+   apart reads as a wash of mud halfway through. Both frames are held at full
+   opacity instead and the new one is clipped in as a circle from the control
+   that was pressed, so the change reads as a wipe rather than a dissolve.
+   ========================================================================= */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
 /* Reduced motion is honored from two directions: the OS preference and the
    in-product setting. Both collapse animation to an instant state change. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

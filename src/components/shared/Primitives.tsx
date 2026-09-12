@@ -253,10 +253,23 @@ export function Tooltip({
   label: string;
   body?: string;
   children: ReactNode;
-  side?: 'top' | 'bottom';
+  /**
+   * 'right' exists for the navigation rail. A 56px rail centring a 16rem
+   * tooltip puts more than half of it off the left edge of the window, where
+   * it is silently clipped — the trigger is too close to the viewport edge for
+   * a centred popover to be an option at all.
+   */
+  side?: 'top' | 'bottom' | 'right';
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
+
+  const position =
+    side === 'right'
+      ? 'left-[calc(100%+10px)] top-1/2 -translate-y-1/2'
+      : side === 'top'
+        ? 'left-1/2 -translate-x-1/2 bottom-[calc(100%+6px)]'
+        : 'left-1/2 -translate-x-1/2 top-[calc(100%+6px)]';
 
   return (
     <span
@@ -276,9 +289,7 @@ export function Tooltip({
         <span
           role="tooltip"
           id={id}
-          className={`anim-fade pointer-events-none absolute left-1/2 z-toast w-64 -translate-x-1/2 rounded-panel border border-rule bg-bed-2 p-2.5 shadow-pop ${
-            side === 'top' ? 'bottom-[calc(100%+6px)]' : 'top-[calc(100%+6px)]'
-          }`}
+          className={`anim-fade pointer-events-none absolute z-toast w-64 rounded-panel border border-rule bg-bed-2 p-2.5 shadow-pop ${position}`}
         >
           <span className="block t-label text-ink">{label}</span>
           {body ? (

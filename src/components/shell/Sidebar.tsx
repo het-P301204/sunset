@@ -48,7 +48,7 @@ export function Sidebar({
   view: ViewId;
   onNavigate: (view: ViewId) => void;
   theme: 'dark' | 'light';
-  onToggleTheme: () => void;
+  onToggleTheme: (trigger: Element | null) => void;
   enabled: boolean;
 }) {
   const primary = VIEWS.filter((v) => v.id !== 'settings' && v.id !== 'import');
@@ -96,7 +96,7 @@ export function Sidebar({
         <li className="flex justify-center pt-1">
           <button
             type="button"
-            onClick={onToggleTheme}
+            onClick={(event) => onToggleTheme(event.currentTarget)}
             className="flex h-8 w-8 items-center justify-center rounded-control text-ink-faint transition-colors duration-fast ease-out hover:bg-bed-2 hover:text-ink-dim"
             aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
           >
@@ -135,7 +135,7 @@ function RailItem({
       <Tooltip
         label={`${descriptor.address}  ${descriptor.label}`}
         body={`${descriptor.summary}  Shortcut: G then ${descriptor.chord.toUpperCase()}.`}
-        side="bottom"
+        side="right"
       >
         <a
           href={`#/${descriptor.id}`}

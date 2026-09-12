@@ -4,6 +4,7 @@ import { useStore } from '@/state/store';
 import { findingById, rankedFindings } from '@/state/selectors';
 import { VIEWS, isViewId, type ViewId } from '@/state/views';
 import { useRoute } from '@/hooks/useRoute';
+import { applyThemeWithWave, originOf, resolveTheme } from '@/state/theme';
 import { useKeyboard } from '@/hooks/useKeyboard';
 import { HatchDefs } from '@/components/shared/Hatch';
 import { ErrorState, SkeletonRows } from '@/components/shared/States';
@@ -106,10 +107,16 @@ export function App() {
     setTraversal([]);
   }, [view]);
 
-  const theme =
-    state.settings.theme === 'system'
-      ? (document.documentElement.getAttribute('data-theme') as 'dark' | 'light') ?? 'dark'
-      : state.settings.theme;
+  const theme = resolveTheme(state.settings.theme);
+
+  // The wave starts at the control that was pressed, so the change reads as
+  // something the operator caused rather than something that happened to them.
+  const toggleTheme = (trigger: Element | null) => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    applyThemeWithWave(next, originOf(trigger), () =>
+      dispatch({ type: 'settings', patch: { theme: next } }),
+    );
+  };
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden bg-ground">
@@ -147,12 +154,7 @@ export function App() {
           onNavigate={navigate}
           theme={theme}
           enabled={ready}
-          onToggleTheme={() =>
-            dispatch({
-              type: 'settings',
-              patch: { theme: theme === 'dark' ? 'light' : 'dark' },
-            })
-          }
+          onToggleTheme={toggleTheme}
         />
 
         <main

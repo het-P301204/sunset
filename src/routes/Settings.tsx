@@ -3,6 +3,7 @@ import { SEVERITY_ORDER } from '@/types/domain';
 import { localEngine } from '@/adapters/engine';
 import { useStore } from '@/state/store';
 import { clearPersisted } from '@/state/persistence';
+import { applyThemeWithWave, originOf, resolveTheme } from '@/state/theme';
 import { VIEWS } from '@/state/views';
 import { SEVERITY_LABEL } from '@/components/shared/Hatch';
 import { Button, Input, SectionHead, Select, Toggle } from '@/components/shared/Primitives';
@@ -101,12 +102,12 @@ export function Settings() {
             </div>
             <Select
               value={settings.theme}
-              onChange={(e) =>
-                dispatch({
-                  type: 'settings',
-                  patch: { theme: e.target.value as typeof settings.theme },
-                })
-              }
+              onChange={(e) => {
+                const preference = e.target.value as typeof settings.theme;
+                applyThemeWithWave(resolveTheme(preference), originOf(e.currentTarget), () =>
+                  dispatch({ type: 'settings', patch: { theme: preference } }),
+                );
+              }}
               className="w-28"
               aria-label="Theme"
             >
