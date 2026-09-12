@@ -100,12 +100,15 @@ export function App() {
     onPrevious: () => selectedFindingId && step(-1),
   });
 
-  // Fresh route, fresh scroll. Without this, moving from a scrolled inventory
-  // to the overview lands halfway down it.
+  // Fresh route, fresh scroll, and no drawer carried over. Without the last of
+  // these, opening a finding and then navigating leaves the drawer hanging over
+  // an unrelated view — over Settings, over the report preview — with its J/K
+  // traversal pointing at a list that is no longer on screen behind it.
   useEffect(() => {
     mainRef.current?.scrollTo({ top: 0 });
     setTraversal([]);
-  }, [view]);
+    dispatch({ type: 'select', id: null });
+  }, [view, dispatch]);
 
   const theme = resolveTheme(state.settings.theme);
 

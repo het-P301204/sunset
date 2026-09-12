@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: typecheck · test · build
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '22']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      # The fixtures are generated from a fixed seed. If the committed JSON ever
+      # drifts from what the generator produces, every number in the README and
+      # in the test suite is measuring something that cannot be reproduced.
+      - name: Fixtures are reproducible from their generator
+        run: |
+          python3 scripts/generate-fixtures.py src/fixtures
+          git diff --exit-code -- src/fixtures
+
+      - name: The offline claim holds
+        run: |
+          if grep -rqE 'fonts\.(googleapis|gstatic)\.com' dist/; then
+            echo "::error::A font CDN reference reached the bundle; the product claims no network at runtime."
+            exit 1
+          fi
+          test -f dist/fonts/Inter-latin.woff2
+          test -f dist/fonts/JetBrainsMono-latin.woff2
