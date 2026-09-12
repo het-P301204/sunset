@@ -210,7 +210,7 @@ function FilterGroup({ label, children }: { label: string; children: React.React
   return (
     <fieldset className="flex min-w-0 items-start gap-2">
       <legend className="sr-only">{label}</legend>
-      <span className="t-label mt-1 shrink-0 text-[9px]">{label}</span>
+      <span className="t-label mt-1 shrink-0 text-3xs">{label}</span>
       <span className="flex flex-wrap gap-1">{children}</span>
     </fieldset>
   );
@@ -243,7 +243,7 @@ function FilterPill({
     >
       {mark}
       {children}
-      <span className="t-data text-[9px] text-ink-faint">{count}</span>
+      <span className="t-data text-3xs text-ink-faint">{count}</span>
     </button>
   );
 }

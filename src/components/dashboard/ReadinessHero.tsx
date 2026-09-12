@@ -219,7 +219,7 @@ function RecoveryBar({
                 >
                   {pct.toFixed(0)}%
                 </span>
-                <span className="t-label text-[9px]" style={{ color: segment.text }}>
+                <span className="t-label text-3xs" style={{ color: segment.text }}>
                   {segment.label}
                 </span>
                 <span className="t-data text-2xs text-ink-faint">{segment.count}</span>

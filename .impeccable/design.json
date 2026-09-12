@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-12T00:00:00.000Z",
+  "title": "Design System: SUNSET",
+  "extensions": {
+    "colorMeta": {
+      "ground": {
+        "role": "neutral",
+        "displayName": "Graphite Ground",
+        "canonical": "#08090b",
+        "lightTheme": "#eeebe3",
+        "printTheme": "#ffffff",
+        "tonalRamp": ["#08090b", "#0c0e11", "#101216", "#16191f", "#1c2028", "#23272f", "#333943", "#767c86"]
+      },
+      "bed-1": {
+        "role": "neutral",
+        "displayName": "Bed One",
+        "canonical": "#101216",
+        "lightTheme": "#faf8f3",
+        "tonalRamp": ["#08090b", "#0c0e11", "#101216", "#16191f", "#1c2028", "#23272f", "#333943", "#565c66"]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Hairline Rule",
+        "canonical": "#23272f",
+        "lightTheme": "#cdc6b6",
+        "tonalRamp": ["#101216", "#171a20", "#23272f", "#333943", "#565c66", "#767c86", "#858b95", "#aab0b9"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Log Ink",
+        "canonical": "#e9e6e0",
+        "lightTheme": "#191b1f",
+        "contrastOnGround": "17.2:1",
+        "tonalRamp": ["#191b1f", "#333943", "#565c66", "#767c86", "#858b95", "#aab0b9", "#cfcdc7", "#e9e6e0"]
+      },
+      "ink-dim": { "role": "neutral", "displayName": "Dim Ink", "canonical": "#aab0b9", "lightTheme": "#4a4f57", "contrastOnGround": "9.0:1" },
+      "ink-muted": { "role": "neutral", "displayName": "Muted Ink", "canonical": "#858b95", "lightTheme": "#5f636b", "contrastOnGround": "5.7:1" },
+      "ink-faint": { "role": "neutral", "displayName": "Faint Ink", "canonical": "#767c86", "lightTheme": "#656971", "contrastOnGround": "4.7:1" },
+      "amber": {
+        "role": "primary",
+        "displayName": "Marker Amber",
+        "canonical": "#f0a03c",
+        "lightTheme": "#a25c12",
+        "printTheme": "#8a4d0c",
+        "tonalRamp": ["#3b2609", "#5c3a0e", "#7d4f13", "#a25c12", "#c07c22", "#dd9130", "#f0a03c", "#f7c98b"]
+      },
+      "coral": {
+        "role": "secondary",
+        "displayName": "Signal Coral",
+        "canonical": "#e8734a",
+        "lightTheme": "#b8452a",
+        "tonalRamp": ["#3a1a10", "#5c2a19", "#7d3922", "#9e482b", "#b8452a", "#d2603b", "#e8734a", "#f3a288"]
+      },
+      "risk-critical": {
+        "role": "tertiary",
+        "displayName": "Critical Red",
+        "canonical": "#ef5f63",
+        "lightTheme": "#c02127",
+        "hatch": "3px diagonal, densest",
+        "tonalRamp": ["#3d1012", "#5f191d", "#821f25", "#a52229", "#c02127", "#d94046", "#ef5f63", "#f7a6a9"]
+      },
+      "risk-high": { "role": "tertiary", "displayName": "High Orange", "canonical": "#ef9448", "lightTheme": "#b35d12", "hatch": "5px diagonal" },
+      "risk-medium": { "role": "tertiary", "displayName": "Medium Ochre", "canonical": "#dfad4a", "lightTheme": "#8a6a12", "hatch": "4px horizontal" },
+      "risk-low": { "role": "tertiary", "displayName": "Low Slate-Blue", "canonical": "#7595b1", "lightTheme": "#3f5f7c", "hatch": "5px dot" },
+      "risk-safe": { "role": "tertiary", "displayName": "Safe Green", "canonical": "#4bb37e", "lightTheme": "#1f7a4f", "hatch": "8px stipple, sparsest" },
+      "risk-unknown": {
+        "role": "tertiary",
+        "displayName": "No-Recovery Violet",
+        "canonical": "#a083cc",
+        "lightTheme": "#6244a0",
+        "hatch": "9px counter-diagonal, deliberately sparse",
+        "tonalRamp": ["#241a3a", "#372a57", "#4a3775", "#6244a0", "#7a5cb8", "#8e70c4", "#a083cc", "#c9b7e4"]
+      }
+    },
+    "typographyMeta": {
+      "figure": { "displayName": "Monumental Figure", "purpose": "The four readiness numerals on a shared baseline. Mono at light weight: the largest type on screen is still data." },
+      "headline": { "displayName": "Headline", "purpose": "Drawer and dialog titles only." },
+      "title": { "displayName": "Section Title", "purpose": "Ruled section heads (t-section). A hairline and a name, never a kicker above it." },
+      "body": { "displayName": "Body", "purpose": "Application default, Inter 13/20 with cv05/cv08/ss03. Prose capped at a 68ch measure." },
+      "data": { "displayName": "Data", "purpose": "Every algorithm, identifier, date, score, path and measurement. Ligatures off." },
+      "label": { "displayName": "Mono Label", "purpose": "Field labels, column heads, chips, the rail's three-digit view addresses." }
+    },
+    "shadows": [
+      { "name": "drawer", "value": "0 0 0 1px var(--c-rule), -24px 0 48px -12px rgba(0,0,0,0.55)", "purpose": "The finding drawer, which slides over the ranked queue while leaving it visible." },
+      { "name": "pop", "value": "0 12px 32px -8px rgba(0,0,0,0.5), 0 2px 6px -2px rgba(0,0,0,0.4)", "purpose": "Modals, tooltips, command palette." },
+      { "name": "lift", "value": "0 2px 8px -2px rgba(0,0,0,0.4)", "purpose": "The report preview sheet, which reads as paper on a desk." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for entrances and state transitions." },
+      { "name": "ease-inout", "value": "cubic-bezier(0.65, 0, 0.35, 1)", "purpose": "Symmetric moves." },
+      { "name": "dur-instant", "value": "90ms", "purpose": "Mark and hover-tint changes." },
+      { "name": "dur-fast", "value": "140ms", "purpose": "Control colour and border transitions." },
+      { "name": "dur-base", "value": "220ms", "purpose": "Fades, drawer entrance, toggle knob travel." },
+      { "name": "dur-slow", "value": "420ms", "purpose": "Rise entrances, staggered at 38ms per child." },
+      { "name": "dur-reveal", "value": "640ms", "purpose": "Stroke draw on plotted geometry." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1536px" },
+      { "name": "3xl", "value": "1600px" }
+    ],
+    "structure": [
+      { "name": "rail", "value": "56px" },
+      { "name": "topbar", "value": "44px" },
+      { "name": "foot", "value": "26px" },
+      { "name": "gutter", "value": "20px" },
+      { "name": "row-analytical", "value": "44px" },
+      { "name": "row-table", "value": "34px" },
+      { "name": "row-compact", "value": "28px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single amber action per view. Amber is the deadline signal, so it is also the thing that moves you toward the deadline.",
+      "html": "<button class=\"ds-btn-primary\">ANALYZE INVENTORY</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; background: var(--c-amber, #f0a03c); color: var(--c-amber-ink, #120b03); border: 1px solid var(--c-amber, #f0a03c); border-radius: 2px; cursor: pointer; transition: filter 140ms cubic-bezier(0.16,1,0.3,1), background 140ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { filter: brightness(1.1); } .ds-btn-primary:focus-visible { outline: 2px solid var(--c-amber, #f0a03c); outline-offset: 1px; } .ds-btn-primary:disabled { opacity: 0.4; pointer-events: none; }"
+    },
+    {
+      "name": "Default Button",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "The workhorse control: a bed-step field with a hairline border.",
+      "html": "<button class=\"ds-btn-default\">Export</button>",
+      "css": ".ds-btn-default { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-variant-numeric: tabular-nums; background: var(--c-bed-2, #16191f); color: var(--c-ink, #e9e6e0); border: 1px solid var(--c-rule, #23272f); border-radius: 2px; cursor: pointer; transition: background 140ms cubic-bezier(0.16,1,0.3,1), border-color 140ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-default:hover { background: var(--c-bed-3, #1c2028); border-color: var(--c-rule-strong, #333943); } .ds-btn-default:focus-visible { outline: 2px solid var(--c-amber, #f0a03c); outline-offset: 1px; }"
+    },
+    {
+      "name": "Quiet Button",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Borderless inline affordance used for 'open X' links, rail actions and dialog close buttons.",
+      "html": "<button class=\"ds-btn-quiet\">Open timeline</button>",
+      "css": ".ds-btn-quiet { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 8px; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; background: transparent; color: var(--c-ink-dim, #aab0b9); border: 1px solid transparent; border-radius: 2px; cursor: pointer; transition: color 140ms cubic-bezier(0.16,1,0.3,1), background 140ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-quiet:hover { color: var(--c-ink, #e9e6e0); background: var(--c-bed-2, #16191f); } .ds-btn-quiet:focus-visible { outline: 2px solid var(--c-amber, #f0a03c); outline-offset: 1px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Mono label above, hairline field below. Caret is amber in every text field.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-field-label\" for=\"ds-i1\">CRQC HORIZON</label><input class=\"ds-field-input\" id=\"ds-i1\" value=\"2032\" /><p class=\"ds-field-hint\">Year a cryptographically relevant quantum computer is assumed</p></div>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 4px; } .ds-field-label { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 14px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--c-ink-muted, #858b95); } .ds-field-input { height: 32px; padding: 0 8px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--c-ink, #e9e6e0); background: var(--c-bed-0, #0c0e11); border: 1px solid var(--c-rule, #23272f); border-radius: 2px; caret-color: var(--c-amber, #f0a03c); transition: border-color 140ms cubic-bezier(0.16,1,0.3,1); } .ds-field-input::placeholder { color: var(--c-ink-faint, #767c86); } .ds-field-input:hover { border-color: var(--c-rule-strong, #333943); } .ds-field-input:focus { border-color: var(--c-amber-dim, #a8722c); } .ds-field-input:focus-visible { outline: 2px solid var(--c-amber, #f0a03c); outline-offset: 1px; } .ds-field-hint { margin: 0; font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--c-ink-muted, #858b95); }"
+    },
+    {
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip-neutral",
+      "description": "Outlined 20px tag. Colour lives in the border and the text; chips are never filled.",
+      "html": "<span class=\"ds-chip\">RSA-2048</span> <span class=\"ds-chip ds-chip-amber\">2030 KEY EST</span>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; height: 20px; padding: 0 6px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-variant-numeric: tabular-nums; background: transparent; color: var(--c-ink-dim, #aab0b9); border: 1px solid var(--c-rule, #23272f); border-radius: 2px; } .ds-chip-amber { color: var(--c-amber, #f0a03c); border-color: var(--c-amber-dim, #a8722c); }"
+    },
+    {
+      "name": "Ruled Bed",
+      "kind": "card",
+      "refersTo": "bed-panel",
+      "description": "The panel primitive of this world: a hairline-bounded bed with a ruled head. Not a card.",
+      "html": "<section class=\"ds-bed\"><div class=\"ds-bed-head\"><h2 class=\"ds-bed-title\">WHAT TO MIGRATE FIRST</h2><span class=\"ds-bed-meta\">412 findings ranked, 63 unrankable</span></div><dl class=\"ds-bed-body\"><div class=\"ds-row\"><dt class=\"ds-row-label\">ALGORITHM</dt><dd class=\"ds-row-value\">RSA-2048 / PKCS#1 v1.5</dd></div><div class=\"ds-row\"><dt class=\"ds-row-label\">DATA LIFETIME</dt><dd class=\"ds-row-value ds-unknown\">not supplied</dd></div></dl></section>",
+      "css": ".ds-bed { background: var(--c-bed-1, #101216); border: 1px solid var(--c-rule, #23272f); border-radius: 3px; padding: 12px 16px; } .ds-bed-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; border-bottom: 1px solid var(--c-rule, #23272f); padding-bottom: 8px; } .ds-bed-title { margin: 0; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-ink-dim, #aab0b9); } .ds-bed-meta { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--c-ink-muted, #858b95); } .ds-bed-body { margin: 0; } .ds-row { display: grid; grid-template-columns: minmax(0, 11rem) 1fr; gap: 2px 16px; padding: 6px 0; border-bottom: 1px solid var(--c-rule-faint, #171a20); } .ds-row:last-child { border-bottom: 0; } .ds-row-label { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 14px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--c-ink-muted, #858b95); } .ds-row-value { margin: 0; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--c-ink, #e9e6e0); } .ds-unknown { color: var(--c-unknown, #a083cc); }"
+    },
+    {
+      "name": "Severity Badge",
+      "kind": "custom",
+      "refersTo": "chip-neutral",
+      "description": "The system's signature mark: a hatched square stroked in its severity colour, followed by the severity name. Pattern carries the meaning; colour is the second channel.",
+      "html": "<svg width=\"0\" height=\"0\" aria-hidden=\"true\" style=\"position:absolute\"><defs><pattern id=\"ds-hx-critical\" width=\"3\" height=\"3\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(45)\"><rect width=\"3\" height=\"3\" fill=\"var(--c-critical,#ef5f63)\" opacity=\"0.14\"/><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"3\" stroke=\"var(--c-critical,#ef5f63)\" stroke-width=\"1.4\"/></pattern><pattern id=\"ds-hx-unknown\" width=\"9\" height=\"9\" patternUnits=\"userSpaceOnUse\" patternTransform=\"rotate(-45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"9\" stroke=\"var(--c-unknown,#a083cc)\" stroke-width=\"1\"/></pattern></defs></svg><span class=\"ds-sev ds-sev-critical\"><svg width=\"10\" height=\"10\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><rect x=\"0.5\" y=\"0.5\" width=\"9\" height=\"9\" fill=\"url(#ds-hx-critical)\" stroke=\"var(--c-critical,#ef5f63)\" stroke-width=\"1\"/></svg>CRITICAL</span> <span class=\"ds-sev ds-sev-unknown\"><svg width=\"10\" height=\"10\" viewBox=\"0 0 10 10\" aria-hidden=\"true\"><rect x=\"0.5\" y=\"0.5\" width=\"9\" height=\"9\" fill=\"url(#ds-hx-unknown)\" stroke=\"var(--c-unknown,#a083cc)\" stroke-width=\"1\"/></svg>UNKNOWN</span>",
+      "css": ".ds-sev { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; } .ds-sev-critical { color: var(--c-critical, #ef5f63); } .ds-sev-unknown { color: var(--c-unknown, #a083cc); }"
+    },
+    {
+      "name": "Navigation Rail Item",
+      "kind": "nav",
+      "refersTo": "button-quiet",
+      "description": "56px icon-only rail. The active view is marked by an amber rule on the leading edge — the timeline's marker-horizon device — never a filled pill.",
+      "html": "<nav class=\"ds-rail\" aria-label=\"Sections\"><a class=\"ds-rail-item ds-rail-active\" href=\"#\" aria-current=\"page\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2 2 7l10 5 10-5-10-5Z\"/><path d=\"m2 17 10 5 10-5\"/><path d=\"m2 12 10 5 10-5\"/></svg></a><a class=\"ds-rail-item\" href=\"#\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"2\"/><path d=\"M3 9h18M3 15h18M9 3v18\"/></svg></a></nav>",
+      "css": ".ds-rail { display: flex; flex-direction: column; gap: 2px; width: 56px; padding: 8px 0; background: var(--c-bed-0, #0c0e11); border-right: 1px solid var(--c-rule, #23272f); } .ds-rail-item { position: relative; display: flex; align-items: center; justify-content: center; height: 34px; color: var(--c-ink-faint, #767c86); transition: color 140ms cubic-bezier(0.16,1,0.3,1), background 140ms cubic-bezier(0.16,1,0.3,1); } .ds-rail-item:hover { color: var(--c-ink-dim, #aab0b9); background: var(--c-bed-2, #16191f); } .ds-rail-item:focus-visible { outline: 2px solid var(--c-amber, #f0a03c); outline-offset: -2px; } .ds-rail-active { color: var(--c-ink, #e9e6e0); } .ds-rail-active::before { content: ''; position: absolute; left: 0; top: 4px; bottom: 4px; width: 2px; background: var(--c-amber, #f0a03c); }"
+    },
+    {
+      "name": "Readiness Figure",
+      "kind": "custom",
+      "refersTo": "bed-flat",
+      "description": "A monumental mono numeral on a shared baseline, mono label above, hairline to its right. The figures are the structure, not a KPI row.",
+      "html": "<div class=\"ds-figs\"><button class=\"ds-fig\"><span class=\"ds-fig-label\">ASSESSED</span><span class=\"ds-fig-value\">68<span class=\"ds-fig-suffix\">%</span></span><span class=\"ds-fig-note\">284 of 415 findings have every scoring input</span></button><button class=\"ds-fig\"><span class=\"ds-fig-label\">UNKNOWN</span><span class=\"ds-fig-value ds-fig-unknown\">63</span><span class=\"ds-fig-note\">Not scored: a required input was absent</span></button></div>",
+      "css": ".ds-figs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--c-rule-faint, #171a20); } .ds-fig { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 20px; text-align: left; background: transparent; border: 0; border-right: 1px solid var(--c-rule-faint, #171a20); cursor: pointer; transition: background 140ms cubic-bezier(0.16,1,0.3,1); } .ds-fig:last-child { border-right: 0; } .ds-fig:hover { background: var(--c-bed-1, #101216); } .ds-fig:focus-visible { outline: 2px solid var(--c-amber, #f0a03c); outline-offset: -2px; } .ds-fig-label { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; line-height: 14px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; color: var(--c-ink-muted, #858b95); } .ds-fig-value { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 300; font-size: clamp(2.75rem, 5.5vw, 5.25rem); line-height: 0.85; font-variant-numeric: tabular-nums; color: var(--c-ink, #e9e6e0); } .ds-fig-unknown { color: var(--c-unknown, #a083cc); } .ds-fig-suffix { color: var(--c-ink-faint, #767c86); } .ds-fig-note { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--c-ink-muted, #858b95); }"
+    },
+    {
+      "name": "Toggle",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Settings switch. Amber wash and amber-dim border mark the on state; the knob travels over 220ms.",
+      "html": "<div class=\"ds-toggle-row\"><span class=\"ds-toggle-text\"><span class=\"ds-toggle-label\">Reduce motion</span><span class=\"ds-toggle-desc\">Collapses every entrance to an instant state change.</span></span><button class=\"ds-toggle ds-toggle-on\" role=\"switch\" aria-checked=\"true\"><span class=\"ds-toggle-knob\"></span></button></div>",
+      "css": ".ds-toggle-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 10px 0; } .ds-toggle-text { display: block; max-width: 68ch; } .ds-toggle-label { display: block; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; color: var(--c-ink, #e9e6e0); } .ds-toggle-desc { display: block; margin-top: 2px; font-family: 'Inter', system-ui, sans-serif; font-size: 12px; color: var(--c-ink-muted, #858b95); } .ds-toggle { position: relative; flex-shrink: 0; width: 36px; height: 20px; border-radius: 999px; background: var(--c-bed-2, #16191f); border: 1px solid var(--c-rule, #23272f); cursor: pointer; transition: background 140ms cubic-bezier(0.16,1,0.3,1), border-color 140ms cubic-bezier(0.16,1,0.3,1); } .ds-toggle-on { background: var(--c-amber-wash, rgba(240,160,60,0.09)); border-color: var(--c-amber-dim, #a8722c); } .ds-toggle-knob { position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 999px; background: var(--c-ink-muted, #858b95); transition: all 220ms cubic-bezier(0.16,1,0.3,1); } .ds-toggle-on .ds-toggle-knob { left: 19px; background: var(--c-amber, #f0a03c); } .ds-toggle:focus-visible { outline: 2px solid var(--c-amber, #f0a03c); outline-offset: 1px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Core Log",
+    "overview": "SUNSET is drawn the way a borehole log is drawn. One ruled axis governs the whole surface, material is stacked in beds against it, and the interval the drill could not recover is drawn to scale with its own percentage rather than quietly omitted. That last device is why the world was chosen: a dashboard of KPI tiles over a donut has nowhere honest to put \"we do not know,\" and this product's most important number is exactly that.\n\nThe surface is near-black graphite at rest with beds stepping up through four barely-separated greys, divided by 1px hairlines rather than by card edges. Density is deliberate and high — the interface scale bottoms out at 10px mono labels — because a log sheet is dense by nature and the operator is reading it on a workstation, beside a terminal, for a long stretch. Amber is the only warm signal in the field and it means one thing: a deadline, or the action that moves you toward one. Risk is carried by hatch pattern before colour, which is why the product needs no separate accessible mode.\n\nBoth themes are authored, not derived. The light theme is the same core log printed on buff log paper with ink-brown rules and a darker amber that still reads as amber; it is not an inversion of the dark theme, and its ink roles were re-measured against paper rather than reused. Print is a third authored surface: the browser's own print pipeline against a forced paper palette, so the exported PDF is the same markup the operator reviewed.",
+    "keyCharacteristics": [
+      "Ruled beds and hairlines; no cards, no rounded panels floating on a field",
+      "Severity encoded by hatch pattern first, colour second, ordinal by density",
+      "Amber reserved for deadline signal and the single primary action per view",
+      "Tabular numerals everywhere; mono for every algorithm, identifier, date and score",
+      "Shallow, role-based radius (2px controls, 3px panels, 0 on analytical surfaces)",
+      "Two independently authored themes plus an authored print palette"
+    ],
+    "rules": [
+      { "name": "The One Amber Rule", "body": "Amber is the deadline signal, and therefore the primary action. It appears at most once per view as a fill. Everything else that needs amber gets a rule, a border, an underline or the 9% wash.", "section": "colors" },
+      { "name": "The Pattern-First Rule", "body": "Severity is encoded by hatch pattern before colour. Pattern density is ordinal — CRITICAL densest (3px diagonal), HIGH (5px diagonal), MEDIUM (4px horizontal), LOW (5px dot), SAFE sparsest (8px stipple) — and UNKNOWN runs counter-diagonal at 9px so it can never be mistaken for material that was there. Because of this rule the product has no separate accessible mode; add the pattern, not a toggle.", "section": "colors" },
+      { "name": "The Two Themes Rule", "body": "Light is not an inversion. Every colour role is authored against its own ground and its contrast re-measured. Changing one theme's value never implies changing the other's.", "section": "colors" },
+      { "name": "The Tabular Numeral Rule", "body": "Every numeral in this product is data. font-variant-numeric: tabular-nums is set on body, input, button, select and textarea; a column of numbers never re-flows as it updates.", "section": "typography" },
+      { "name": "The No Eyebrow Rule", "body": "A section is introduced by a hairline and a name. There is no kicker, no eyebrow, no supporting label stacked above a heading. Explanatory copy sits beside the head as a wrapping meta line, and it wraps rather than truncating — a sentence cut mid-word has stopped being information.", "section": "typography" },
+      { "name": "The Visible Default Rule", "body": "Every entrance animates from an already-visible default state. A failed or suppressed animation must never leave content hidden.", "section": "layout" },
+      { "name": "The Offset-Only Rule", "body": "Shadows carry an offset and a blur. A zero-offset glow is not part of this world; if an element needs to register without leaving the plane, give it a rule or a bed step.", "section": "elevation" },
+      { "name": "The Hairline Rule", "body": "Panels are ruled beds separated by hairlines. Never cards. If a surface needs to be distinguished, change its bed step or close it with a rule; do not float it on a shadow with a big radius.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do encode severity with its hatch pattern first and its colour second, keeping density ordinal (CRITICAL densest through SAFE sparsest, UNKNOWN counter-diagonal and sparse).",
+      "Do reserve amber for deadline signal and the one primary action per view; use the 9% wash or a rule when amber must register without filling.",
+      "Do separate surfaces with 1px hairlines and bed steps (bed-0 to bed-3), and close every section with a rule.",
+      "Do keep radius role-based: 2px controls, 3px panels, 0 on anything analytical.",
+      "Do set every numeral tabular and every identifier, algorithm, date, score and path in JetBrains Mono with ligatures off.",
+      "Do read every colour from src/styles/tokens.css via its Tailwind alias, so a theme change stays a token swap.",
+      "Do author the light theme against paper on its own terms and re-measure its ink roles to 4.5:1.",
+      "Do start every entrance animation from an already-visible default, and honour both the OS reduced-motion preference and the in-product setting.",
+      "Do put the severity key on the surface where the patterns are used."
+    ],
+    "donts": [
+      "Don't build panels as cards — no floating rounded surfaces on a field, no card grids where a ruled bed or a real table belongs.",
+      "Don't distinguish severity by colour alone, or add a parallel \"accessible mode\" instead of a pattern.",
+      "Don't use amber as a surface fill for anything but the single primary action, and never for a whole panel or row background.",
+      "Don't use a zero-offset halo or glow shadow; shadows carry offset and blur, and only on elements that leave the plane.",
+      "Don't stack a kicker or eyebrow above a section head; a hairline and a name is the whole head.",
+      "Don't use proportional numerals, ligatured mono, or a decorative display face — there is no display face in this system.",
+      "Don't derive the light theme by inverting the dark one, or reuse a dark-theme risk hue on paper.",
+      "Don't hardcode a hex value in a component; every colour has a token, and a component that bypasses it will not follow the theme or the print palette.",
+      "Don't remove or re-style the global focus ring per component."
+    ]
+  }
+}

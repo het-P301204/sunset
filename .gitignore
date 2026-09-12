@@ -12,6 +12,7 @@ dist/
 .impeccable/mocks/
 .impeccable/config.local.json
 .impeccable/payload-*.json
+.impeccable/questions/
 .impeccable/brief-body.md
 .playwright-mcp/
 

@@ -86,7 +86,7 @@ function QueueRow({
                 label="HNDL"
                 body="Harvest now, decrypt later. Traffic recorded today is readable once a CRQC exists, so the exposure has already begun."
               >
-                <span className="t-data cursor-help border border-rule px-1 text-[9px] uppercase tracking-[0.1em] text-ink-muted">
+                <span className="t-data cursor-help border border-rule px-1 text-3xs uppercase tracking-[0.1em] text-ink-muted">
                   HNDL
                 </span>
               </Tooltip>
@@ -163,7 +163,7 @@ function Metric({
 }) {
   return (
     <span className="flex flex-col gap-0.5 lg:flex-row lg:items-baseline lg:justify-between lg:gap-2">
-      <span className="t-label text-[9px]">{label}</span>
+      <span className="t-label text-3xs">{label}</span>
       <span className={`t-data text-xs ${unknown ? 'text-risk-unknown' : 'text-ink-dim'}`}>
         {value}
       </span>

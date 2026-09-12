@@ -168,7 +168,7 @@ export function CoverageRing({
               {Math.round((arc.count / total) * 100)}%
             </dt>
             <dd>
-              <span className="t-label text-[9px]" style={{ color: arc.stroke }}>
+              <span className="t-label text-3xs" style={{ color: arc.stroke }}>
                 {arc.label}
               </span>
               <span className="t-data ml-2 text-2xs text-ink-faint">{arc.count}</span>
@@ -239,7 +239,7 @@ export function UnknownBreakdown({
                   <span className="flex items-baseline gap-2">
                     <span className="text-sm text-ink">{row.label}</span>
                     <span
-                      className={`t-data text-[9px] uppercase tracking-[0.08em] ${
+                      className={`t-data text-3xs uppercase tracking-[0.08em] ${
                         blocking ? 'text-risk-unknown' : 'text-ink-faint'
                       }`}
                     >

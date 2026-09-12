@@ -49,6 +49,9 @@ export default {
       fontSize: {
         // Interface scale. Analytical surfaces live at the small end on purpose:
         // a core log is dense by nature and the density is the point.
+        // The densest label tier on an analytical surface. It earned a name
+        // once it had been reached for by hand in three dozen places.
+        '3xs': ['9px', { lineHeight: '12px', letterSpacing: '0.1em' }],
         '2xs': ['10px', { lineHeight: '14px', letterSpacing: '0.08em' }],
         xs: ['11px', { lineHeight: '16px', letterSpacing: '0.04em' }],
         sm: ['12px', { lineHeight: '18px', letterSpacing: '0.01em' }],

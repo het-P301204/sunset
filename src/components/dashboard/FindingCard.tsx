@@ -55,7 +55,7 @@ export function FindingCard({ finding }: { finding: Finding }) {
       <dl className="mt-2 space-y-0.5">
         {rows.map(([label, value, unknown]) => (
           <div key={label} className="flex items-baseline justify-between gap-3">
-            <dt className="t-label text-[9px]">{label}</dt>
+            <dt className="t-label text-3xs">{label}</dt>
             <dd
               className={`t-data truncate text-xs ${unknown ? 'text-risk-unknown' : 'text-ink-dim'}`}
             >
@@ -65,7 +65,7 @@ export function FindingCard({ finding }: { finding: Finding }) {
         ))}
       </dl>
       <div className="mt-2 flex items-center justify-between border-t border-rule-faint pt-2">
-        <span className="t-label text-[9px]">Verdict</span>
+        <span className="t-label text-3xs">Verdict</span>
         <span
           className={`t-data text-2xs uppercase tracking-[0.1em] ${
             finding.verdict === 'migrate-now'

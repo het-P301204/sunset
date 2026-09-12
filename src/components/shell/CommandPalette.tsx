@@ -281,7 +281,7 @@ export function CommandPalette({
             return (
               <li key={entry.id}>
                 {showGroup ? (
-                  <div className="t-label px-3 pb-1 pt-2.5 text-[9px]">{entry.group}</div>
+                  <div className="t-label px-3 pb-1 pt-2.5 text-3xs">{entry.group}</div>
                 ) : null}
                 <div
                   id={`palette-${entry.id}`}

@@ -53,7 +53,7 @@ export function ReportPreview({ model }: { model: ReportModel }) {
           <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-3 lg:grid-cols-6">
             {(['critical', 'high', 'medium', 'low', 'safe', 'unknown'] as const).map((s) => (
               <div key={s}>
-                <dt className="flex items-center gap-1.5 t-label text-[9px]">
+                <dt className="flex items-center gap-1.5 t-label text-3xs">
                   <SeverityMark severity={s} size={8} />
                   {SEVERITY_LABEL[s]}
                 </dt>
@@ -69,7 +69,7 @@ export function ReportPreview({ model }: { model: ReportModel }) {
               <thead>
                 <tr>
                   {['DEADLINE', 'OBLIGATION', 'AUTHORITY', 'FINDINGS'].map((h) => (
-                    <th key={h} className="border-b border-rule py-1.5 t-label text-[9px]">
+                    <th key={h} className="border-b border-rule py-1.5 t-label text-3xs">
                       {h}
                     </th>
                   ))}
@@ -106,7 +106,7 @@ export function ReportPreview({ model }: { model: ReportModel }) {
             <thead>
               <tr>
                 {['ASSET', 'ALGORITHM', 'MISSING FIELD'].map((h) => (
-                  <th key={h} className="border-b border-rule py-1.5 t-label text-[9px]">
+                  <th key={h} className="border-b border-rule py-1.5 t-label text-3xs">
                     {h}
                   </th>
                 ))}
@@ -145,7 +145,7 @@ export function ReportPreview({ model }: { model: ReportModel }) {
               <tr>
                 {['#', 'ASSET', 'ALGORITHM', 'SEV', 'SCORE', 'DEADLINE', 'LIFETIME', 'EFFORT', 'AGILITY', 'VERDICT'].map(
                   (h) => (
-                    <th key={h} className="border-b border-rule py-1.5 t-label text-[9px]">
+                    <th key={h} className="border-b border-rule py-1.5 t-label text-3xs">
                       {h}
                     </th>
                   ),
@@ -266,7 +266,7 @@ export function ReportPreview({ model }: { model: ReportModel }) {
           <dl className="mt-3 grid grid-cols-4 gap-4">
             {(['blocked', 'warned', 'allowed', 'unevaluable'] as const).map((key) => (
               <div key={key}>
-                <dt className="t-label text-[9px]">{OUTCOME_LABEL[key]}</dt>
+                <dt className="t-label text-3xs">{OUTCOME_LABEL[key]}</dt>
                 <dd className="t-data mt-0.5 text-xl font-light">{model.simulation![key]}</dd>
               </div>
             ))}
@@ -302,7 +302,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Meta({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="t-label text-[9px]">{label}</dt>
+      <dt className="t-label text-3xs">{label}</dt>
       <dd className="t-data mt-0.5 truncate text-xs text-ink-dim">{value}</dd>
     </div>
   );

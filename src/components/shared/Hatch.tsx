@@ -161,7 +161,7 @@ export function HatchKey({ className = '' }: { className?: string }) {
         <li key={severity} className="flex items-center gap-1.5">
           <SeverityMark severity={severity} size={9} />
           <span
-            className="t-data text-[9px] uppercase tracking-[0.08em]"
+            className="t-data text-3xs uppercase tracking-[0.08em]"
             style={{ color: SEVERITY_VAR[severity] }}
           >
             {SEVERITY_LABEL[severity]}

@@ -240,7 +240,7 @@ function StepRail({ step }: { step: Step }) {
             {i < index ? <Check size={11} strokeWidth={2.25} /> : String(i + 1)}
           </span>
           <span
-            className={`t-label text-[9px] ${i <= index ? 'text-ink-dim' : 'text-ink-faint'}`}
+            className={`t-label text-3xs ${i <= index ? 'text-ink-dim' : 'text-ink-faint'}`}
           >
             {s.label}
           </span>
@@ -379,7 +379,7 @@ function Validation({
 function Stat({ label, value, tone }: { label: string; value: number; tone?: string }) {
   return (
     <div className="bg-bed-0 px-3 py-3">
-      <div className="t-label text-[9px]">{label}</div>
+      <div className="t-label text-3xs">{label}</div>
       <div
         className="t-data mt-1 text-2xl font-light leading-none"
         style={{ color: tone ?? 'var(--c-ink)' }}

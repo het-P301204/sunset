@@ -97,10 +97,10 @@ export function MigrationPlan({
                         </span>
                         {entry.operatorBucket ? (
                           <span className="mt-1 flex items-center gap-1.5">
-                            <span className="t-data border border-[color:var(--c-critical)] px-1 text-[8px] uppercase tracking-[0.06em] text-risk-critical">
+                            <span className="t-data border border-[color:var(--c-critical)] px-1 text-3xs uppercase tracking-[0.06em] text-risk-critical">
                               OVR
                             </span>
-                            <span className="t-data truncate text-[9px] text-ink-faint">
+                            <span className="t-data truncate text-3xs text-ink-faint">
                               engine: {BUCKET_LABEL[entry.engineBucket]}
                             </span>
                           </span>
@@ -118,7 +118,7 @@ export function MigrationPlan({
                     <button
                       type="button"
                       onClick={() => openMove(entry, finding)}
-                      className="absolute right-1 top-1 rounded-control border border-rule bg-bed-2 px-1.5 py-0.5 text-[9px] uppercase tracking-[0.08em] text-ink-muted opacity-0 transition-opacity duration-fast focus-visible:opacity-100 group-hover:opacity-100"
+                      className="absolute right-1 top-1 rounded-control border border-rule bg-bed-2 px-1.5 py-0.5 text-3xs uppercase tracking-[0.08em] text-ink-muted opacity-0 transition-opacity duration-fast focus-visible:opacity-100 group-hover:opacity-100"
                     >
                       Move
                     </button>

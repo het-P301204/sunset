@@ -38,7 +38,7 @@ export function AgilitySpectrum({ finding }: { finding: Finding }) {
             return (
               <li key={grade} className="flex flex-col items-center gap-2 text-center">
                 <span
-                  className={`t-data text-[9px] uppercase leading-tight tracking-[0.08em] ${
+                  className={`t-data text-3xs uppercase leading-tight tracking-[0.08em] ${
                     active ? 'text-ink' : 'text-ink-faint'
                   }`}
                 >
@@ -127,7 +127,7 @@ export function AgilityDistribution({
           <div>
             <div className="t-data text-lg leading-none text-ink">{count}</div>
             <div
-              className={`t-label mt-1 text-[9px] leading-tight ${
+              className={`t-label mt-1 text-3xs leading-tight ${
                 grade === 'unknown' ? 'text-risk-unknown' : ''
               }`}
             >

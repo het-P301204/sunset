@@ -115,7 +115,7 @@ export function GapList({ finding }: { finding: Finding }) {
             >
               {gap.field}
             </span>
-            <span className="t-label text-[9px]">
+            <span className="t-label text-3xs">
               {gap.blocking ? 'BLOCKING' : 'REDUCES CONFIDENCE'}
             </span>
           </div>

@@ -129,7 +129,7 @@ export function InventoryTable({
                         column.align === 'right' ? 'justify-end' : ''
                       }`}
                     >
-                      <span className={`t-label text-[9px] ${sorted ? 'text-ink-dim' : ''}`}>
+                      <span className={`t-label text-3xs ${sorted ? 'text-ink-dim' : ''}`}>
                         {column.label}
                       </span>
                       {sorted ? (
@@ -142,7 +142,7 @@ export function InventoryTable({
                     </button>
                   ) : (
                     <span
-                      className={`flex h-8 items-center px-2 t-label text-[9px] ${
+                      className={`flex h-8 items-center px-2 t-label text-3xs ${
                         column.align === 'right' ? 'justify-end' : ''
                       }`}
                     >
@@ -235,7 +235,7 @@ function Row({
                   {finding.hndl ? (
                     <span
                       title="Harvest now, decrypt later"
-                      className="t-data shrink-0 border border-rule px-1 text-[8px] uppercase tracking-[0.08em] text-ink-muted"
+                      className="t-data shrink-0 border border-rule px-1 text-3xs uppercase tracking-[0.08em] text-ink-muted"
                     >
                       HNDL
                     </span>

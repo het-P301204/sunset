@@ -103,13 +103,13 @@ export function ThreatMatrix({
                   className="flex w-full flex-col items-start gap-0.5 px-2 pb-2 pt-3 text-left transition-colors duration-fast ease-out hover:bg-bed-1"
                 >
                   <span className="flex items-center gap-1.5">
-                    <span className="t-label text-[9px] text-ink-dim">{column.label}</span>
+                    <span className="t-label text-3xs text-ink-dim">{column.label}</span>
                     {column.hndl ? (
                       <Tooltip
                         label="HNDL"
                         body="Harvest now, decrypt later. Traffic on this column is being recorded today and becomes readable the day a CRQC exists. The exposure is not in the future."
                       >
-                        <span className="t-data cursor-help border border-[color:var(--c-critical)] px-1 text-[8px] uppercase tracking-[0.08em] text-risk-critical">
+                        <span className="t-data cursor-help border border-[color:var(--c-critical)] px-1 text-3xs uppercase tracking-[0.08em] text-risk-critical">
                           HNDL
                         </span>
                       </Tooltip>
@@ -137,7 +137,7 @@ export function ThreatMatrix({
                     className="flex w-full flex-col gap-0.5 px-2 py-2.5 text-left transition-colors duration-fast ease-out hover:bg-bed-1"
                   >
                     <span
-                      className={`t-label text-[9px] ${
+                      className={`t-label text-3xs ${
                         row.id === 'insufficient'
                           ? 'text-risk-critical'
                           : row.id === 'unknown'
@@ -194,7 +194,17 @@ export function ThreatMatrix({
                           <span className="flex flex-col items-center leading-none">
                             <span className="t-data text-lg text-ink">{cell.length}</span>
                             {critical > 0 ? (
-                              <span className="t-data mt-1 text-[9px] text-risk-critical">
+                              // On a strongly tinted cell the critical hue is
+                              // reading against its own ground, so the count
+                              // steps up to ink rather than disappearing into
+                              // the fill it is describing.
+                              <span
+                                className="t-data mt-1 text-3xs"
+                                style={{
+                                  color:
+                                    intensity > 0.3 ? 'var(--c-ink)' : 'var(--c-critical)',
+                                }}
+                              >
                                 {critical} crit
                               </span>
                             ) : null}

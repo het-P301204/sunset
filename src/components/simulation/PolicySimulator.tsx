@@ -410,7 +410,7 @@ function OutcomeBar({ result, enabled }: { result: SimulationResult; enabled: bo
               <span className="t-data text-xs" style={{ color: segment.stroke }}>
                 {((segment.count / total) * 100).toFixed(0)}%
               </span>
-              <span className="t-label text-[9px]" style={{ color: segment.stroke }}>
+              <span className="t-label text-3xs" style={{ color: segment.stroke }}>
                 {OUTCOME_LABEL[segment.key]}
               </span>
             </span>

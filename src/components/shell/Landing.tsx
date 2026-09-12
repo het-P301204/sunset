@@ -103,7 +103,7 @@ export function Landing({
                 </span>
                 {major ? (
                   <span
-                    className={`absolute top-[66px] w-24 t-data text-[9px] uppercase leading-tight tracking-[0.1em] text-ink-muted ${
+                    className={`absolute top-[66px] w-24 t-data text-3xs uppercase leading-tight tracking-[0.1em] text-ink-muted ${
                       year === TIMELINE_END ? 'right-0 text-right' : 'left-0'
                     }`}
                   >

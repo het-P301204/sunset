@@ -70,7 +70,7 @@ export function StatusFoot({ onNavigate }: { onNavigate: (view: ViewId) => void 
         disabled={!coverage}
         className="group flex h-full items-center gap-2 border-l border-rule px-3 transition-colors duration-fast ease-out hover:bg-bed-2 disabled:cursor-default disabled:hover:bg-transparent"
       >
-        <span className="t-label text-[9px] leading-none">COVERAGE</span>
+        <span className="t-label text-3xs leading-none">COVERAGE</span>
         {coverage ? (
           <>
             <span className="text-ink-muted group-hover:text-ink-dim">
@@ -95,7 +95,7 @@ export function StatusFoot({ onNavigate }: { onNavigate: (view: ViewId) => void 
 function Cell({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex h-full shrink-0 items-center gap-2 border-r border-rule px-3">
-      <span className="t-label text-[9px] leading-none">{label}</span>
+      <span className="t-label text-3xs leading-none">{label}</span>
       {children}
     </div>
   );

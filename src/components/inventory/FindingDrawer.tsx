@@ -323,7 +323,7 @@ export function FindingDrawer({
           <SectionHead title="EVIDENCE" meta={finding.asset.source.kind} />
           {evidenceGroups.map((group) => (
             <div key={group.origin} className="mt-3">
-              <h4 className="t-label mb-1 text-[9px]">{group.title}</h4>
+              <h4 className="t-label mb-1 text-3xs">{group.title}</h4>
               <dl>
                 {group.items.map((item) => (
                   <Field
@@ -340,7 +340,7 @@ export function FindingDrawer({
 
           {Object.keys(finding.asset.attributes).length > 0 ? (
             <div className="mt-3">
-              <h4 className="t-label mb-1 text-[9px]">AS RECORDED IN THE INVENTORY</h4>
+              <h4 className="t-label mb-1 text-3xs">AS RECORDED IN THE INVENTORY</h4>
               <dl className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
                 {Object.entries(finding.asset.attributes).map(([key, value]) => (
                   <div
