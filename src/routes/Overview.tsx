@@ -3,7 +3,7 @@ import { rankedFindings } from '@/state/selectors';
 import { useStore } from '@/state/store';
 import type { ViewId } from '@/state/views';
 import { ReadinessHero } from '@/components/dashboard/ReadinessHero';
-import { SunsetTimeline } from '@/components/dashboard/SunsetTimeline';
+import { DeadlineLedger } from '@/components/dashboard/DeadlineLedger';
 import { PriorityQueue } from '@/components/dashboard/PriorityQueue';
 import { ThreatMatrix } from '@/components/analysis/ThreatMatrix';
 import { Button, SectionHead } from '@/components/shared/Primitives';
@@ -12,11 +12,16 @@ import { HatchKey } from '@/components/shared/Hatch';
 /* ============================================================================
    OVERVIEW  /  100
 
-   Four questions in reading order: what is happening, what do I fix first,
-   which deadline is closest, and how much of this did we actually assess. The
-   last one is answered twice — once in the readiness figures and once in the
-   NO RECOVERY band under the timeline — because it is the one a reader most
-   wants to skip.
+   Four questions in reading order: which deadline is closest, what is the
+   overall state, what do I fix first, and how much of this did we actually
+   assess. The last one is answered twice — in the readiness figures and again
+   in the core-recovery bar — because it is the one a reader most wants to skip.
+
+   The ledger leads rather than the timeline. The timeline plots when work must
+   START, which is the right axis for planning and the wrong one for arriving:
+   the first thing a reader wants on opening is the date they are held to and
+   how much of the estate hangs off it. The column itself lives at 400, one
+   click away, and this page does not repeat it.
    ========================================================================= */
 
 export function Overview({
@@ -56,26 +61,31 @@ export function Overview({
 
   return (
     <div className="pb-10">
-      {/* The column comes first. Opening on a four-up band of big numbers is
-          the arrangement this world exists to refuse, however honest the
-          numbers in it are: the ruled time axis is the thesis, and the
-          readiness figures are what it resolves to. */}
-      <section aria-labelledby="timeline-head" className="border-b border-rule px-4 py-5 lg:px-6">
-        <SectionHead
-          id="timeline-head"
-          title="SUNSET TIMELINE"
-          meta="plotted by the year migration must start, not the year the deadline falls"
-          actions={
-            <div className="flex items-center gap-4">
-              <HatchKey />
-              <Button size="sm" variant="quiet" onClick={() => onNavigate('timeline')}>
-                Open timeline
-              </Button>
-            </div>
-          }
-        />
-        <div className="mt-4">
-          <SunsetTimeline analysis={analysis} onSelect={onSelect} selectedId={selectedId} />
+      <section aria-labelledby="ledger-head" className="border-b border-rule">
+        <div className="px-4 pt-5 lg:px-6">
+          <SectionHead
+            id="ledger-head"
+            title="DEADLINE LEDGER"
+            meta="the published obligations this estate is measured against"
+            actions={
+              <div className="flex items-center gap-4">
+                <HatchKey />
+                <Button size="sm" variant="quiet" onClick={() => onNavigate('timeline')}>
+                  Open timeline
+                </Button>
+              </div>
+            }
+          />
+        </div>
+        <div className="mt-3">
+          <DeadlineLedger
+            analysis={analysis}
+            onSelectDeadline={(year) => {
+              dispatch({ type: 'filters/reset' });
+              dispatch({ type: 'filters', patch: { deadlineYears: [year] } });
+              onNavigate('inventory');
+            }}
+          />
         </div>
       </section>
 
