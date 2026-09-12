@@ -90,10 +90,14 @@
   --c-rule: #23272f;
   --c-rule-strong: #333943;
 
+  /* Measured against --c-ground #08090b. Every value below is a text colour
+     somewhere in the product, including the small mono labels and the queue's
+     margin numerals, so all four clear 4.5:1 rather than only the first two.
+     ink 17.2:1 / ink-dim 9.0:1 / ink-muted 5.7:1 / ink-faint 4.7:1 */
   --c-ink: #e9e6e0;
   --c-ink-dim: #aab0b9;
-  --c-ink-muted: #7b818b;
-  --c-ink-faint: #565c66;
+  --c-ink-muted: #858b95;
+  --c-ink-faint: #767c86;
 
   --c-amber: #f0a03c;
   --c-amber-dim: #a8722c;
@@ -111,7 +115,6 @@
   --c-selection: rgba(240, 160, 60, 0.26);
   --c-scroll-thumb: #2b303a;
   --c-scroll-thumb-hover: #3a4049;
-  --grain-opacity: 0.5;
   color-scheme: dark;
 }
 
@@ -131,10 +134,14 @@
   --c-rule: #cdc6b6;
   --c-rule-strong: #a9a192;
 
+  /* Measured against --c-ground #eeebe3. Paper is a lighter ground than the
+     graphite one, so the same roles need darker ink to clear 4.5:1; the light
+     theme is a separate design, and this is one of the places it shows.
+     ink 15.4:1 / ink-dim 8.0:1 / ink-muted 5.1:1 / ink-faint 4.6:1 */
   --c-ink: #191b1f;
   --c-ink-dim: #4a4f57;
-  --c-ink-muted: #6b7079;
-  --c-ink-faint: #8d929a;
+  --c-ink-muted: #5f636b;
+  --c-ink-faint: #656971;
 
   --c-amber: #a25c12;
   --c-amber-dim: #c98a3e;
@@ -152,6 +159,5 @@
   --c-selection: rgba(162, 92, 18, 0.2);
   --c-scroll-thumb: #cdc6b6;
   --c-scroll-thumb-hover: #b3ab99;
-  --grain-opacity: 0.35;
   color-scheme: light;
 }

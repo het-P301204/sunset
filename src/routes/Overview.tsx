@@ -7,6 +7,7 @@ import { SunsetTimeline } from '@/components/dashboard/SunsetTimeline';
 import { PriorityQueue } from '@/components/dashboard/PriorityQueue';
 import { ThreatMatrix } from '@/components/analysis/ThreatMatrix';
 import { Button, SectionHead } from '@/components/shared/Primitives';
+import { HatchKey } from '@/components/shared/Hatch';
 
 /* ============================================================================
    OVERVIEW  /  100
@@ -55,23 +56,30 @@ export function Overview({
 
   return (
     <div className="pb-10">
-      <ReadinessHero analysis={analysis} onDrill={drill} />
-
+      {/* The column comes first. Opening on a four-up band of big numbers is
+          the arrangement this world exists to refuse, however honest the
+          numbers in it are: the ruled time axis is the thesis, and the
+          readiness figures are what it resolves to. */}
       <section aria-labelledby="timeline-head" className="border-b border-rule px-4 py-5 lg:px-6">
         <SectionHead
           id="timeline-head"
           title="SUNSET TIMELINE"
           meta="plotted by the year migration must start, not the year the deadline falls"
           actions={
-            <Button size="sm" variant="quiet" onClick={() => onNavigate('timeline')}>
-              Open timeline
-            </Button>
+            <div className="flex items-center gap-4">
+              <HatchKey />
+              <Button size="sm" variant="quiet" onClick={() => onNavigate('timeline')}>
+                Open timeline
+              </Button>
+            </div>
           }
         />
         <div className="mt-4">
           <SunsetTimeline analysis={analysis} onSelect={onSelect} selectedId={selectedId} />
         </div>
       </section>
+
+      <ReadinessHero analysis={analysis} onDrill={drill} />
 
       <section aria-labelledby="queue-head" className="border-b border-rule">
         <div className="px-4 pt-5 lg:px-6">

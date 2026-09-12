@@ -57,7 +57,33 @@ export function ThreatMatrix({
     return map;
   }, [findings]);
 
-  const max = Math.max(...[...grid.values()].map((v) => v.length), 1);
+  /*
+   * Intensity is scaled inside each row, and each row has its own ceiling.
+   *
+   * Scaling across the whole matrix inverted the meaning of the thing: the
+   * largest cells in this product are NOT APPLICABLE (symmetric and hash, which
+   * Mosca does not govern), so a global scale painted the two cells the reader
+   * must not act on brighter than every cell they must. Weight now reads as
+   * urgency, which is what a reader assumes a heat map means.
+   */
+  const ROW_CEILING: Record<WindowState, number> = {
+    insufficient: 0.62,
+    tight: 0.44,
+    unknown: 0.4,
+    sufficient: 0.18,
+    'not-applicable': 0.14,
+  };
+
+  const rowMax = useMemo(() => {
+    const out = new Map<WindowState, number>();
+    for (const row of ROWS) {
+      out.set(
+        row.id,
+        Math.max(...COLUMNS.map((c) => grid.get(`${c.id}|${row.id}`)?.length ?? 0), 1),
+      );
+    }
+    return out;
+  }, [grid]);
 
   return (
     <div className="overflow-x-auto">
@@ -128,7 +154,11 @@ export function ThreatMatrix({
                   const key = `${column.id}|${row.id}`;
                   const cell = grid.get(key) ?? [];
                   const critical = cell.filter((f) => f.severity === 'critical').length;
-                  const intensity = cell.length === 0 ? 0 : 0.1 + (cell.length / max) * 0.6;
+                  const ceiling = ROW_CEILING[row.id];
+                  const intensity =
+                    cell.length === 0
+                      ? 0
+                      : 0.06 + (cell.length / (rowMax.get(row.id) ?? 1)) * ceiling;
                   const isHot = row.id === 'insufficient' && column.hndl && cell.length > 0;
                   return (
                     <td key={key} className="border-b border-l border-rule-faint p-0">

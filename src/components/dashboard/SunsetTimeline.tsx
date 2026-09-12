@@ -233,7 +233,7 @@ export function SunsetTimeline({
                 />
                 <text
                   x={0}
-                  y={top + LANE_HEIGHT - 18}
+                  y={top + LANE_HEIGHT - 27}
                   className="t-data"
                   fontSize="9"
                   letterSpacing="0.12em"
@@ -241,23 +241,50 @@ export function SunsetTimeline({
                 >
                   {lane.label}
                 </text>
-                {/* plotted of total, so an empty lane never reads as an empty class */}
+                {/* Per-class recovery, the way a driller's log records it run
+                    by run rather than only as one figure for the hole. The bar
+                    is the fraction of this class that made it onto the axis;
+                    the rest is drawn in the OFF AXIS band below. */}
                 <text
                   x={0}
-                  y={top + LANE_HEIGHT - 6}
+                  y={top + LANE_HEIGHT - 27}
                   className="t-data"
                   fontSize="10"
                   fill="var(--c-ink-faint)"
+                  textAnchor="start"
+                  dx={PAD_LEFT - 30}
                 >
-                  {count}
-                  <tspan fill="var(--c-rule-strong)"> / {total}</tspan>
+                  {total === 0 ? '' : `${Math.round((count / total) * 100)}%`}
+                </text>
+                <rect
+                  x={0}
+                  y={top + LANE_HEIGHT - 19}
+                  width={PAD_LEFT - 20}
+                  height={3}
+                  fill="var(--c-bed-2)"
+                />
+                <rect
+                  x={0}
+                  y={top + LANE_HEIGHT - 19}
+                  width={total === 0 ? 0 : ((PAD_LEFT - 20) * count) / total}
+                  height={3}
+                  fill="var(--c-ink-muted)"
+                />
+                <text
+                  x={0}
+                  y={top + LANE_HEIGHT - 7}
+                  className="t-data"
+                  fontSize="9"
+                  fill="var(--c-ink-faint)"
+                >
+                  {count} of {total} on axis
                 </text>
                 {count === 0 && total > 0 ? (
                   <>
                     <rect
                       x={PAD_LEFT + 4}
                       y={top + LANE_HEIGHT / 2 - 7}
-                      width={`all ${total} sit off axis · no published deadline governs this class`.length * 6.05 + 10}
+                      width={emptyLaneNote(lane.id, notScored, noDeadline).length * 6.05 + 10}
                       height={14}
                       fill="var(--c-ground)"
                     />
@@ -268,7 +295,7 @@ export function SunsetTimeline({
                       fontSize="10"
                       fill="var(--c-ink-faint)"
                     >
-                      all {total} sit off axis &#183; no published deadline governs this class
+                      {emptyLaneNote(lane.id, notScored, noDeadline)}
                     </text>
                   </>
                 ) : null}
@@ -525,6 +552,32 @@ function placeFindings(
   });
 
   return { placed, notScored, noDeadline };
+}
+
+/**
+ * Why a lane is empty, said accurately.
+ *
+ * "No published deadline governs this class" is true of symmetric and hash and
+ * false of key establishment, which has a 2030 mandate and is empty only
+ * because nothing in it could be scored. Printing the same sentence under both
+ * would tell an operator that their RSA population is out of scope, which is
+ * the most damaging thing this screen could say.
+ */
+function emptyLaneNote(
+  laneId: ThreatClass,
+  notScored: Finding[],
+  noDeadline: Finding[],
+): string {
+  const unscored = notScored.filter((f) => f.threatClass === laneId).length;
+  const undated = noDeadline.filter((f) => f.threatClass === laneId).length;
+
+  if (unscored > 0 && undated > 0) {
+    return `all off axis · ${unscored} not scored, ${undated} governed by no deadline`;
+  }
+  if (unscored > 0) {
+    return `all ${unscored} off axis · not scored, so no start year can be derived`;
+  }
+  return `all ${undated} off axis · no published deadline governs this class`;
 }
 
 function clamp(n: number, lo: number, hi: number): number {

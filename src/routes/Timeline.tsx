@@ -2,7 +2,7 @@ import type { AnalysisResult } from '@/types/domain';
 import { groupByDeadline } from '@/state/selectors';
 import { SunsetTimeline } from '@/components/dashboard/SunsetTimeline';
 import { SectionHead } from '@/components/shared/Primitives';
-import { SeverityMark } from '@/components/shared/Hatch';
+import { HatchKey, SeverityMark } from '@/components/shared/Hatch';
 
 /* ============================================================================
    TIMELINE  /  400
@@ -30,6 +30,7 @@ export function Timeline({
         <SectionHead
           title="MIGRATION COLUMN"
           meta={`${analysis.findings.length} cryptographic uses · CRQC assumed ${analysis.assumptions.crqcYear}`}
+          actions={<HatchKey />}
         />
         <div className="mt-4">
           <SunsetTimeline analysis={analysis} onSelect={onSelect} selectedId={selectedId} />

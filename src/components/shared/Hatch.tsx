@@ -142,6 +142,37 @@ export function HatchDefs() {
 }
 
 /**
+ * The inline key.
+ *
+ * Five hatch patterns exist so that severity survives a grayscale print and a
+ * reader who cannot separate red from orange. That only works if the reader is
+ * told what the patterns mean, and a key that lives behind a keyboard shortcut
+ * is a key most readers never open. This one sits on the surface the patterns
+ * are used on.
+ */
+export function HatchKey({ className = '' }: { className?: string }) {
+  const order: Severity[] = ['critical', 'high', 'medium', 'low', 'safe', 'unknown'];
+  return (
+    <ul
+      className={`hidden flex-wrap items-center gap-x-3 gap-y-1 xl:flex ${className}`}
+      aria-label="Severity key"
+    >
+      {order.map((severity) => (
+        <li key={severity} className="flex items-center gap-1.5">
+          <SeverityMark severity={severity} size={9} />
+          <span
+            className="t-data text-[9px] uppercase tracking-[0.08em]"
+            style={{ color: SEVERITY_VAR[severity] }}
+          >
+            {SEVERITY_LABEL[severity]}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
  * A small filled square carrying a severity's pattern. Used wherever a label
  * needs its own mark rather than relying on the text colour.
  */

@@ -65,6 +65,15 @@ export function parseDocument(raw: string, fileName: string): ParsedDocument {
       'The top level of the document is not an object.',
     );
   }
+  if (Array.isArray(doc)) {
+    // A bare array is the shape you get from copying a `components` list out of
+    // a CBOM, which is a plausible mistake worth naming rather than answering
+    // with "unsupported format".
+    throw new ParseError(
+      'The file is not an inventory document.',
+      'The top level is an array. SUNSET expects the whole document, not a components list: a CBOM carries the bomFormat and specVersion the parser needs in order to read it.',
+    );
+  }
 
   const bytes = new TextEncoder().encode(raw).length;
   const format = detectFormat(doc);

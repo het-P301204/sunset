@@ -304,13 +304,16 @@ export function SectionHead({
   actions?: ReactNode;
   id?: string;
 }) {
+  // The meta line is explanatory copy, not a label, so it wraps rather than
+  // truncating: a sentence cut to "plotted by the…" has stopped being
+  // information and started being decoration.
   return (
-    <div className="flex items-baseline justify-between gap-4 border-b border-rule pb-2">
-      <div className="flex items-baseline gap-3 min-w-0">
+    <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-rule pb-2">
+      <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-0.5">
         <h2 id={id} className="t-section shrink-0">
           {title}
         </h2>
-        {meta ? <div className="min-w-0 truncate text-xs text-ink-muted">{meta}</div> : null}
+        {meta ? <div className="min-w-0 text-xs leading-[15px] text-ink-muted">{meta}</div> : null}
       </div>
       {actions ? <div className="flex shrink-0 items-center gap-1.5">{actions}</div> : null}
     </div>

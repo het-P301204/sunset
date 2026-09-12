@@ -264,7 +264,7 @@ export function FindingDrawer({
 
         {/* --- mosca -------------------------------------------------------- */}
         <section>
-          <SectionHead title="WHY THIS MATTERS" meta="Mosca's inequality" />
+          <SectionHead title="MIGRATION WINDOW" meta="Mosca's inequality" />
           <div className="mt-3">
             <MoscaVisualization
               finding={finding}
